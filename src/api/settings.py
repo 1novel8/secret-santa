@@ -21,6 +21,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+
+    'apps.authentication.apps.AuthenticationConfig',
+    'apps.party.apps.PartyConfig',
+    'apps.present.apps.PresentConfig',
+    'apps.question.apps.QuestionConfig',
 ]
 
 MIDDLEWARE = [
@@ -33,7 +40,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'api.urls'
 
 TEMPLATES = [
     {
@@ -51,7 +58,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = 'api.wsgi.application'
 
 
 DATABASES = {
@@ -65,6 +72,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'authentication.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {

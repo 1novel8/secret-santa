@@ -10,7 +10,7 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update
 
 # install dependencies
-COPY ./src/requirements.txt .
+COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 # copy project

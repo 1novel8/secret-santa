@@ -1,5 +1,5 @@
 """
-ASGI config for secret_santa_ project.
+ASGI api for secret_santa_ project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
