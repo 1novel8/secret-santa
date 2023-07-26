@@ -1,5 +1,5 @@
 """
-WSGI config for secret_santa_ project.
+WSGI api for secret_santa_ project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
