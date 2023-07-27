@@ -11,56 +11,60 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('party', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PartyQuestion',
+            name='DrawResult',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('party', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='party.party')),
             ],
         ),
         migrations.CreateModel(
-            name='Question',
+            name='Party',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('deleted_at', models.DateTimeField(default=None)),
-                ('name', models.CharField(max_length=50, verbose_name='Question Name')),
-                ('text', models.CharField(max_length=200, verbose_name='Question Text')),
+                ('name', models.CharField(max_length=100, verbose_name='Party name')),
+                ('description', models.CharField(max_length=500, verbose_name='Party description')),
+                ('image', models.ImageField(blank=True, upload_to='static/img/parties')),
+                ('draw_results', models.ManyToManyField(related_name='draw_results', through='party.DrawResult', to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'verbose_name': 'Question',
-                'verbose_name_plural': 'Questions',
-                'db_table': 'question',
+                'verbose_name': 'Party',
+                'verbose_name_plural': 'parties',
+                'db_table': 'party',
             },
         ),
         migrations.CreateModel(
-            name='UserPartyQuestionAnswer',
+            name='UserParty',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('answer', models.CharField(max_length=200, verbose_name='User Answer')),
+                ('joined_at', models.DateTimeField(auto_now_add=True)),
                 ('party', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='party.party')),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='question.question')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.AddField(
-            model_name='question',
-            name='answers',
-            field=models.ManyToManyField(related_name='answers', through='question.UserPartyQuestionAnswer', to='party.party'),
+            model_name='party',
+            name='users',
+            field=models.ManyToManyField(related_name='parties', through='party.UserParty', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='question',
-            name='parties',
-            field=models.ManyToManyField(related_name='questions', through='question.PartyQuestion', to='party.party'),
+            model_name='drawresult',
+            name='party',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='party.party'),
         ),
         migrations.AddField(
-            model_name='partyquestion',
-            name='question',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='question.question'),
+            model_name='drawresult',
+            name='receiver',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='receiver', to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='drawresult',
+            name='sender',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sender', to=settings.AUTH_USER_MODEL),
         ),
     ]
