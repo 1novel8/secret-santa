@@ -15,10 +15,14 @@ class Present(BaseModel):
     )
     image = models.ImageField(
         upload_to='static/img/present/',
-        blank=True
+        blank=True,
+        null=True,
+        default=None
     )
     url = models.URLField(
-        blank=True
+        blank=True,
+        null=True,
+        default=None
     )
 
     users = models.ManyToManyField(
