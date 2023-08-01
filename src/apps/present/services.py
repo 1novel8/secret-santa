@@ -1,4 +1,5 @@
-from src.apps.core.services import BaseService
+from apps.core.services import BaseService
+
 from .repositories import PresentRepository
 
 

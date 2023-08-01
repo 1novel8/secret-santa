@@ -1,4 +1,4 @@
-from src.apps.core.repositories import BaseRepository
+from apps.core.repositories import BaseRepository
 
 from .models import Present
 

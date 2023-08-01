@@ -5,10 +5,6 @@ from django.http import Http404
 class BaseRepository:
     model = None
 
-    def __init__(self):
-        if getattr(self, 'model') is None:
-            raise AttributeError(f"attribute model should not be None.")
-
     def get_by_id(self, pk: int) -> Model:
         try:
             return self.model.objects.get(id=pk)

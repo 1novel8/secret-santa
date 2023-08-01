@@ -6,11 +6,6 @@ from apps.core.repositories import BaseRepository
 class BaseService:
     repository = BaseRepository()
 
-    def __init__(self):
-        if not issubclass(type(getattr(self, 'repository')), BaseRepository):
-            raise AttributeError(f"attribute repository should be overloaded "
-                                 f"by a child class for BaseRepository")
-
     def create(self, **kwargs) -> Model:
         return self.repository.create(**kwargs)
 
