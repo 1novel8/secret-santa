@@ -1,26 +1,26 @@
+from django.db.models import Model
+
+from apps.core.repositories import BaseRepository
 
 
 class BaseService:
-    repository = None
+    repository = BaseRepository()
 
     def __init__(self):
-        if getattr(self, '_repository') is None:
-            raise AttributeError(f"attribute _repository should not be None.")
+        if not issubclass(type(getattr(self, 'repository')), BaseRepository):
+            raise AttributeError(f"attribute repository should be overloaded "
+                                 f"by a child class for BaseRepository")
 
-    def create(self, **kwargs):
+    def create(self, **kwargs) -> Model:
         return self.repository.create(**kwargs)
 
-    def update_present(self, pk, **kwargs):
-        return self.repository.update_present(pk, **kwargs)
+    def update(self, pk: int, **kwargs) -> Model:
+        obj = self.repository.get_by_id(pk=pk)
+        return self.repository.update_multiple_fields(obj, **kwargs)
 
-    def get_by_id(self, pk):
-        return self.repository.get_present_by_id(pk)
+    def get_by_id(self, pk: int) -> Model:
+        return self.repository.get_by_id(pk)
 
-    def delete(self, pk):
+    def delete(self, pk: int) -> None:
         obj = self.repository.get_by_id(pk)
-        self.repository.delete_present(obj)
-
-
-s = BaseService()
-print(dir(s))
-
+        self.repository.delete(obj)

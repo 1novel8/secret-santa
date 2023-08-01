@@ -20,7 +20,7 @@ class BaseRepository:
             if not hasattr(obj, field):
                 raise AttributeError(f"Object {obj._meta.db_table} has no field called {field}")
             setattr(obj, field, value)
-        obj.save()
+        obj.save(update_fields=kwargs.keys())
         return obj
 
     def create(self, **kwargs) -> Model:
