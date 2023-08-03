@@ -64,9 +64,6 @@ class User(BaseModel,
 
     objects = UserManager()
 
-    def __str__(self):
-        return f'{self.username} - {self.email}'
-
     class Meta:
         db_table = "user"
         verbose_name = "User"

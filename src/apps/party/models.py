@@ -36,9 +36,6 @@ class Party(BaseModel):
     # questions - M2M
     # answers - M2M
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         db_table = "party"
         verbose_name = "Party"

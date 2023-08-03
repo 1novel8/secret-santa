@@ -1,21 +1,18 @@
-from django.db.models import Model
-
 from apps.core.repositories import BaseRepository
 from .models import Party, UserParty
+from apps.authentication.models import User
 
 
 class PartyRepository(BaseRepository):
     model = Party
 
-    def create(self, **kwargs):
-        user = kwargs.pop('user')
+    def create(self, **kwargs) -> Party:
         party = super().create(**kwargs)
-        party.users.add(
-            user,
-            through_defaults={'is_owner': True}
-        )
         return party
 
-
-class UserPartyRepository(BaseRepository):
-    model = UserParty
+    def add_user(self, user: User, party: Party, is_owner=False) -> Party:
+        party.users.add(
+            user,
+            through_defaults={'is_owner': is_owner}
+        )
+        return party

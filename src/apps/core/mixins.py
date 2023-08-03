@@ -32,7 +32,7 @@ class UpdateModelMixin:
         serializer = self.get_serializer(instance=instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
 
-        obj = self.perform_update(**kwargs, **serializer.data)
+        obj = self.perform_update(**kwargs, **request.data)
         serializer = self.get_serializer(instance=obj)
 
         if getattr(obj, '_prefetched_objects_cache', None):
