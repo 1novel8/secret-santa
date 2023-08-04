@@ -1,10 +1,12 @@
 from rest_framework.routers import SimpleRouter
-
+from rest_framework_nested import routers
 from .views import QuestionViewSet
+from apps.party.urls import router as party_router
 
 urlpatterns = []
 
-router = SimpleRouter()
-router.register('questions', QuestionViewSet, basename='question')
+question_router = routers.NestedSimpleRouter(party_router, r'parties', lookup='party')
+question_router.register('questions', QuestionViewSet, basename='question')
 
-urlpatterns += router.urls
+
+urlpatterns += question_router.urls

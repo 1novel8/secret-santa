@@ -8,8 +8,8 @@ class BaseQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = [
+            'id',
             'name',
             'text',
-            'parties',
             'answers',
         ]

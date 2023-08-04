@@ -19,9 +19,8 @@ class BaseRepository:
                 raise AttributeError(f"Object {obj._meta.db_table} has no field called {field}")
 
             field_obj = obj._meta.get_field(field)
-            if isinstance(field_obj, (models.ManyToManyField,
-                                      models.ManyToManyRel))\
-                    or field != 'id':
+            if isinstance(field_obj, (models.ManyToManyField, models.ManyToManyRel)) \
+                    or field == 'id':
                 continue
             fields.append(field)
             setattr(obj, field, value)
