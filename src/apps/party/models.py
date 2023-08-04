@@ -8,10 +8,14 @@ class Party(BaseModel):
     name = models.CharField(
         "Party name",
         max_length=100,
+        blank=False,
+        null=False,
     )
     description = models.CharField(
         "Party description",
         max_length=500,
+        blank=False,
+        null=False,
     )
     image = models.ImageField(
         upload_to='static/img/parties',
@@ -32,9 +36,6 @@ class Party(BaseModel):
     # questions - M2M
     # answers - M2M
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         db_table = "party"
         verbose_name = "Party"
@@ -46,6 +47,7 @@ class UserParty(models.Model):
     party = models.ForeignKey(Party, on_delete=models.CASCADE)
 
     joined_at = models.DateTimeField(auto_now_add=True)
+    is_owner = models.BooleanField(default=False)
 
 
 class DrawResult(models.Model):
