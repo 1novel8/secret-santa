@@ -16,8 +16,7 @@ class BaseRepository:
         fields = []
         for field, value in kwargs.items():
             if not hasattr(obj, field):
-                raise AttributeError(f"Object {obj._meta.db_table} has no field called {field}")
-
+                continue
             field_obj = obj._meta.get_field(field)
             if isinstance(field_obj, (models.ManyToManyField, models.ManyToManyRel)) \
                     or field == 'id':

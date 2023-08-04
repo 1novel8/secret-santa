@@ -23,12 +23,16 @@ class QuestionService(BaseService):
     def get_by_id(self, pk: int, **kwargs):
         question = self.repository.get_by_id(pk=pk)
         party = self.party_service.get_by_id(pk=kwargs.get('party_pk'), **kwargs)
-        if self.party_service.is_member(user=kwargs.get('user'), party=party):
-            if question.party_id == int(kwargs.get('party_pk')):
+        if self.party_service.is_member(user=kwargs.pop('user'), party=party):
+            if question.party_id == int(kwargs.pop('party_pk')):
                 return question
             raise NotFound('No such question')
-        raise PermissionDenied("only owner can add questions")
+        raise PermissionDenied("only member can see questions")
 
     def list(self, **kwargs):
         party = self.party_service.get_by_id(pk=kwargs.get('party_pk'), **kwargs)
         return party.questions.all()
+
+    def update(self, pk: int, **kwargs) -> Question:
+        question = self.get_by_id(pk=pk, **kwargs)
+        return self.repository.update_multiple_fields(obj=question, **kwargs)

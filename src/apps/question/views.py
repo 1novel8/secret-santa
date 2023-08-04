@@ -36,6 +36,9 @@ class QuestionViewSet(mixins.ListModelMixin,
 
     def list(self, request, *args, **kwargs):
         questions = self.service.list(user=self.request.user, **kwargs)
-
         serializer = self.get_serializer(questions, many=True)
+
         return Response(serializer.data)
+
+    def perform_update(self, **kwargs):
+        return self.service.update(user=self.request.user, **kwargs)
