@@ -22,7 +22,7 @@ class QuestionService(BaseService):
     def get_by_id(self, pk: int, **kwargs):
         question = self.repository.get_by_id(pk=pk)
         party = question.party
-        if kwargs.get('user') not in party.users.all():
+        if self.party_service.is_owner(party=party, user=kwargs.get('user')):
             raise PermissionDenied('Only member can work with party\'s question')
         return question
 
