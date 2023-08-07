@@ -1,9 +1,10 @@
-from django.db.models import Q
+from rest_framework.exceptions import PermissionDenied
 
 from .models import Party
 from .repositories import PartyRepository
 from apps.core.services import BaseService
 from apps.authentication.models import User
+from apps.question.models import Question
 
 
 class PartyService(BaseService):
@@ -21,26 +22,27 @@ class PartyService(BaseService):
 
     def update(self, pk: int, **kwargs) -> Party:
         obj = self.repository.get_by_id(pk=pk)
-        if self.is_owner(
-                user=kwargs.pop('user'),
-                party=obj
-        ):
+        if self.is_owner(user=kwargs.pop('user'), party=obj):
             return self.repository.update_multiple_fields(obj, **kwargs)
         else:
-            raise PermissionError('Edit party can only owner')
+            raise PermissionDenied('Edit party can only owner')
 
     def get_by_id(self, pk: int, **kwargs):
         obj = self.repository.get_by_id(pk=pk)
-        if self.is_member(
-                user=kwargs.pop('user'),
-                party=obj
-        ):
-            return self.repository.update_multiple_fields(obj, **kwargs)
+        if self.is_member(user=kwargs.get('user'), party=obj):
+            return obj
         else:
-            raise PermissionError('Edit party can only owner')
+            raise PermissionDenied('View party can only members')
 
     def is_owner(self, user: User, party: Party) -> bool:
         return party.userparty_set.filter(user=user, is_owner=True).exists()
 
     def is_member(self, user: User, party: Party) -> bool:
         return party.userparty_set.filter(user=user).exists()
+
+    def delete(self, pk: int, **kwargs) -> None:
+        party = self.get_by_id(pk=pk)
+        if self.is_owner(party=party.party, user=kwargs.get('user')):
+            self.repository.delete(party)
+        else:
+            raise PermissionDenied('Only member can work with party\'s question')

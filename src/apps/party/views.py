@@ -9,10 +9,10 @@ from apps.core import mixins as custom_mixins
 
 
 class PartyViewSet(mixins.ListModelMixin,
-                   custom_mixins.UpdateModelMixin,  # done
-                   custom_mixins.RetrieveModelMixin,  # done
-                   custom_mixins.CreateModelMixin,  # done
-                   custom_mixins.DestroyModelMixin,  # done
+                   custom_mixins.UpdateModelMixin,
+                   custom_mixins.RetrieveModelMixin,
+                   custom_mixins.CreateModelMixin,
+                   custom_mixins.DestroyModelMixin,
                    GenericViewSet):
     queryset = Party.objects.all()
     serializer_class = BasePartySerializer
@@ -33,3 +33,8 @@ class PartyViewSet(mixins.ListModelMixin,
         serializer = self.get_serializer(instance=obj)
 
         return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        self.service.delete(user=kwargs.get('user'), **kwargs)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

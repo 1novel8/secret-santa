@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import Model
-from django.http import Http404
+from rest_framework.exceptions import NotFound
 
 
 class BaseRepository:
@@ -10,18 +10,16 @@ class BaseRepository:
         try:
             return self.model.objects.get(id=pk)
         except:
-            raise Http404("Объект не найден")
+            raise NotFound("Объект не найден")
 
     def update_multiple_fields(self, obj: Model, **kwargs):
         fields = []
         for field, value in kwargs.items():
             if not hasattr(obj, field):
-                raise AttributeError(f"Object {obj._meta.db_table} has no field called {field}")
-
+                continue
             field_obj = obj._meta.get_field(field)
-            if isinstance(field_obj, (models.ManyToManyField,
-                                      models.ManyToManyRel))\
-                    or field != 'id':
+            if isinstance(field_obj, (models.ManyToManyField, models.ManyToManyRel))\
+                    or 'id' in field:
                 continue
             fields.append(field)
             setattr(obj, field, value)

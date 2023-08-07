@@ -14,9 +14,9 @@ class Question(BaseModel):
         max_length=200,
     )
 
-    parties = models.ManyToManyField(
+    party = models.ForeignKey(
         Party,
-        through='PartyQuestion',
+        on_delete=models.CASCADE,
         related_name='questions',
     )
 
@@ -33,11 +33,6 @@ class Question(BaseModel):
         db_table = "question"
         verbose_name = "Question"
         verbose_name_plural = "Questions"
-
-
-class PartyQuestion(models.Model):
-    party = models.ForeignKey(Party, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
 
 class UserPartyQuestionAnswer(models.Model):
