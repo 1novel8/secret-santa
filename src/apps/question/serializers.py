@@ -4,6 +4,7 @@ from .models import Question
 
 
 class BaseQuestionSerializer(serializers.ModelSerializer):
+    party_id = serializers.IntegerField(required=True, write_only=True)
 
     class Meta:
         model = Question
@@ -11,5 +12,6 @@ class BaseQuestionSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'text',
-            'answers',
+            'party_id',
         ]
+

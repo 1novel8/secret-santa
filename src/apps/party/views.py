@@ -33,3 +33,8 @@ class PartyViewSet(mixins.ListModelMixin,
         serializer = self.get_serializer(instance=obj)
 
         return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        self.service.delete(user=kwargs.get('user'), **kwargs)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -39,3 +39,10 @@ class PartyService(BaseService):
 
     def is_member(self, user: User, party: Party) -> bool:
         return party.userparty_set.filter(user=user).exists()
+
+    def delete(self, pk: int, **kwargs) -> None:
+        party = self.get_by_id(pk=pk)
+        if self.is_owner(party=party.party, user=kwargs.get('user')):
+            self.repository.delete(party)
+        else:
+            raise PermissionDenied('Only member can work with party\'s question')
