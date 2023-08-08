@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins, permissions, status
@@ -8,6 +9,7 @@ from .services import PartyService
 from apps.core import mixins as custom_mixins
 
 
+@extend_schema(tags=['party'])
 class PartyViewSet(mixins.ListModelMixin,
                    custom_mixins.UpdateModelMixin,
                    custom_mixins.RetrieveModelMixin,

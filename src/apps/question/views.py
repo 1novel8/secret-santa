@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -9,6 +10,7 @@ from .services import QuestionService
 from apps.core import mixins as custom_mixins
 
 
+@extend_schema(tags=['question'])
 class QuestionViewSet(custom_mixins.UpdateModelMixin,
                       custom_mixins.RetrieveModelMixin,
                       custom_mixins.CreateModelMixin,

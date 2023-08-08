@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status, mixins, permissions
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
@@ -7,6 +8,7 @@ from .serializers import CreateUserSerializer, UpdateUserSerializer, RetrieveUse
 from apps.core.mixins import SerializeByActionMixin, PermissionsByAction
 
 
+@extend_schema(tags=['user'])
 class UserViewSet(SerializeByActionMixin,
                   PermissionsByAction,
                   GenericViewSet,
