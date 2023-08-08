@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, PermissionsMixin, BaseUserManager
 
-from apps.core.models import BaseModel, BaseModelManager
+from apps.core.models import BaseModel, BaseModelManager, generate_unique_image_name
 
 
 class UserManager(BaseUserManager,
@@ -52,8 +52,10 @@ class User(BaseModel,
     )
     image = models.ImageField(
         "User Image",
-        upload_to='static/img/users/',
+        upload_to=generate_unique_image_name,
         blank=True,
+        null=True,
+        default=None
     )
     # draw_results - M2M
     # parties - M2M

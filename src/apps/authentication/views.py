@@ -23,7 +23,7 @@ class UserViewSet(SerializeByActionMixin,
     }
     permissions_by_action = {
         'retrieve': [permissions.IsAuthenticated],
-        'create': [],
+        'create': [permissions.AllowAny],
         'partial_update': [permissions.IsAuthenticated],
         'destroy': [permissions.IsAuthenticated],
     }
