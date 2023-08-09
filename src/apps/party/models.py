@@ -32,6 +32,9 @@ class Party(BaseModel):
         through_fields=('party', 'sender'),
         related_name='draw_results',
     )
+    finish_time = models.DateTimeField(
+        "Time when party will be ended"
+    )
 
     # questions - M2M
     # answers - M2M

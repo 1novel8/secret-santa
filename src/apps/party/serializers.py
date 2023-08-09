@@ -19,6 +19,7 @@ class BasePartySerializer(serializers.ModelSerializer):
             'users',
             'draw_results',
             'questions',
+            'finish_time',
         ]
 
     # users
