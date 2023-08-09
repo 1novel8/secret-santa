@@ -28,15 +28,29 @@ services:
     env_file:
       - .env
 
-  celery:
+  worker:
     build:
       context: .
+    hostname: worker
     command: celery -A api worker --loglevel=info
     volumes:
       - .:/secret_santa/
     depends_on:
       - app
       - redis
+
+  flower:
+    build:
+      context: .
+    hostname: worker
+    command: celery -A api flower
+    volumes:
+      - .:/secret_santa/
+    depends_on:
+      - app
+      - redis
+    ports:
+      - "5555:5555"
 
   redis:
     image: redis
