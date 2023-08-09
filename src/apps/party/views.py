@@ -24,6 +24,12 @@ class PartyViewSet(mixins.ListModelMixin,
 
     http_method_names = ['get', 'patch', 'put', 'post', 'delete']
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.service.list(user=self.request.user, **kwargs)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     def perform_create(self, **kwargs):
         return self.service.create(user=self.request.user, **kwargs)
 

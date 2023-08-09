@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Model
+from django.db.models import Model, QuerySet
 from rest_framework.exceptions import NotFound
 
 
@@ -32,3 +32,7 @@ class BaseRepository:
 
     def delete(self, obj: Model) -> None:
         obj.delete()
+
+    def list(self):
+        return self.model.objects.all()
+

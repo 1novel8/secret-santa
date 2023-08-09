@@ -28,6 +28,7 @@ class QuestionService(BaseService):
 
     def update(self, pk: int, **kwargs) -> Question:
         question = self.get_by_id(pk=pk, **kwargs)
+        kwargs.pop('party_id')
         return self.repository.update_multiple_fields(obj=question, **kwargs)
 
     def delete(self, pk: int, **kwargs) -> None:

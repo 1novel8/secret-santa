@@ -46,3 +46,6 @@ class PartyService(BaseService):
             self.repository.delete(party)
         else:
             raise PermissionDenied('Only member can work with party\'s question')
+
+    def list(self, **kwargs) -> list:
+        return Party.objects.filter(userparty__user_id=kwargs.get('user').id)
