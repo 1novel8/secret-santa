@@ -7,9 +7,12 @@ from ..question.models import Question
 class PartyRepository(BaseRepository):
     model = Party
 
-    def add_user(self, user: User, party: Party, is_owner=False) -> Party:
+    def add_user(self, user: User, party: Party, is_owner=False, is_confirmed=False) -> Party:
         party.users.add(
             user,
-            through_defaults={'is_owner': is_owner}
+            through_defaults={
+                'is_owner': is_owner,
+                'is_confirmed': is_confirmed,
+            }
         )
         return party

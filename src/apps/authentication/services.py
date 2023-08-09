@@ -35,5 +35,8 @@ class UserService(BaseService):
     def get_by_id(self, pk: int, **kwargs) -> User:
         return self.repository.get_by_id(pk=pk)
 
-    def get_by_email(self, email: str, **kwargs) -> User:
+    def get_by_email(self, email: str) -> User:
         return self.repository.get_by_email(email=email)
+
+    def is_email_exist(self, email: str):
+        return self.repository.is_email_exist(email=email)

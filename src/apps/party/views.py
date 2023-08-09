@@ -10,6 +10,7 @@ from .services import PartyService
 from apps.core import mixins as custom_mixins
 from .tasks import send_email
 from ..authentication.models import User
+from ..authentication.services import UserService
 
 
 @extend_schema(tags=['party'])
@@ -28,7 +29,7 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
         'create': BasePartySerializer,
         'partial_update': BasePartySerializer,
         'destroy': BasePartySerializer,
-        'invite_user': InviteUserSerializer,
+        'invite': InviteUserSerializer,
     }
 
     permission_classes = (permissions.IsAuthenticated, )
@@ -58,8 +59,19 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @action(methods=["POST"], detail=False, url_path='invite_user')
-    def invite_user(self, request, **kwargs):
-        User.objects.create(**request.data)
-        send_email.delay(**request.data)
-        return Response(status=status.HTTP_200_OK)
+    @action(methods=["POST"], detail=True, url_path='invite')
+    def invite(self, request, **kwargs):
+        user_service = UserService()
+        user = None
+        try:
+            user = user_service.get_by_email(**request.data)
+        except:
+            user = user_service.create(**request.data)
+        finally:
+            self.service.invite_user(
+                user=user,
+                party=self.service.get_by_id(user=self.request.user,**kwargs),
+            )
+            send_email.delay(**request.data)
+            return Response(status=status.HTTP_200_OK)
+
