@@ -1,21 +1,23 @@
 from drf_spectacular.utils import extend_schema
-from rest_framework import status, mixins, permissions
+from rest_framework import status, permissions
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 
 from .models import User
 from .serializers import CreateUserSerializer, UpdateUserSerializer, RetrieveUserSerializer
 from apps.core.mixins import SerializeByActionMixin, PermissionsByAction
+from apps.core import mixins as custom_mixins
+from .services import UserService
 
 
 @extend_schema(tags=['user'])
 class UserViewSet(SerializeByActionMixin,
                   PermissionsByAction,
                   GenericViewSet,
-                  mixins.CreateModelMixin,
-                  mixins.RetrieveModelMixin,
-                  mixins.DestroyModelMixin,
-                  mixins.UpdateModelMixin):
+                  custom_mixins.CreateModelMixin,
+                  custom_mixins.RetrieveModelMixin,
+                  custom_mixins.DestroyModelMixin,
+                  custom_mixins.UpdateModelMixin):
     queryset = User.objects.all()
     serialize_by_action = {
         'retrieve': RetrieveUserSerializer,
@@ -25,21 +27,29 @@ class UserViewSet(SerializeByActionMixin,
     }
     permissions_by_action = {
         'retrieve': [permissions.IsAuthenticated],
-        'create': [],
+        'create': [permissions.AllowAny],
         'partial_update': [permissions.IsAuthenticated],
         'destroy': [permissions.IsAuthenticated],
     }
     permission_classes = (permissions.IsAuthenticated, )
+
+    service = UserService()
+
     http_method_names = ['get', 'patch', 'post', 'delete']
 
-    def perform_destroy(self, instance):
-        if self.request.user.is_authenticated and instance == self.request.user:
-            instance.delete()
-            return
-        return Response(status=status.HTTP_403_FORBIDDEN)
+    def perform_create(self, **kwargs):
+        return self.service.create(**kwargs)
 
-    def partial_update(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated and self.get_object() == self.request.user:
-            kwargs['partial'] = True
-            return self.update(request, *args, **kwargs)
-        return Response(status=status.HTTP_403_FORBIDDEN)
+    def perform_update(self, **kwargs):
+        return self.service.update(user=self.request.user, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        self.service.delete(user=kwargs.get('user'), **kwargs)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def retrieve(self, request, *args, **kwargs):
+        obj = self.service.get_by_id(**kwargs)
+        serializer = self.get_serializer(instance=obj)
+
+        return Response(serializer.data)

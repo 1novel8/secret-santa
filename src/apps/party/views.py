@@ -1,16 +1,20 @@
 from drf_spectacular.utils import extend_schema
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins, permissions, status
 
 from .models import Party
-from .serializers import BasePartySerializer
+from .serializers import BasePartySerializer, InviteUserSerializer
 from .services import PartyService
 from apps.core import mixins as custom_mixins
+from .tasks import send_email
+from ..authentication.models import User
 
 
 @extend_schema(tags=['party'])
-class PartyViewSet(mixins.ListModelMixin,
+class PartyViewSet(custom_mixins.SerializeByActionMixin,
+                   mixins.ListModelMixin,
                    custom_mixins.UpdateModelMixin,
                    custom_mixins.RetrieveModelMixin,
                    custom_mixins.CreateModelMixin,
@@ -19,6 +23,13 @@ class PartyViewSet(mixins.ListModelMixin,
     queryset = Party.objects.all()
     serializer_class = BasePartySerializer
     service = PartyService()
+    serialize_by_action = {
+        'retrieve': BasePartySerializer,
+        'create': BasePartySerializer,
+        'partial_update': BasePartySerializer,
+        'destroy': BasePartySerializer,
+        'invite_user': InviteUserSerializer,
+    }
 
     permission_classes = (permissions.IsAuthenticated, )
 
@@ -46,3 +57,9 @@ class PartyViewSet(mixins.ListModelMixin,
         self.service.delete(user=kwargs.get('user'), **kwargs)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(methods=["POST"], detail=False, url_path='invite_user')
+    def invite_user(self, request, **kwargs):
+        User.objects.create(**request.data)
+        send_email.delay(**request.data)
+        return Response(status=status.HTTP_200_OK)
