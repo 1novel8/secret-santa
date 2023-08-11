@@ -1,7 +1,7 @@
 from django.db import models
 
 from apps.authentication.models import User
-from apps.core.models import BaseModel
+from apps.core.models import BaseModel, generate_unique_image_name
 
 
 class Present(BaseModel):
@@ -14,11 +14,15 @@ class Present(BaseModel):
         max_length=200,
     )
     image = models.ImageField(
-        upload_to='static/img/present/',
-        blank=True
+        upload_to=generate_unique_image_name,
+        blank=True,
+        null=True,
+        default=None,
     )
     url = models.URLField(
-        blank=True
+        blank=True,
+        null=True,
+        default=None
     )
 
     users = models.ManyToManyField(

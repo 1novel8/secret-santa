@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.core.models import BaseModel
+from apps.core.models import BaseModel, generate_unique_image_name
 from apps.authentication.models import User
 
 
@@ -8,14 +8,20 @@ class Party(BaseModel):
     name = models.CharField(
         "Party name",
         max_length=100,
+        blank=False,
+        null=False,
     )
     description = models.CharField(
         "Party description",
         max_length=500,
+        blank=False,
+        null=False,
     )
     image = models.ImageField(
-        upload_to='static/img/parties',
+        upload_to=generate_unique_image_name,
         blank=True,
+        null=True,
+        default=None,
     )
     users = models.ManyToManyField(
         User,
@@ -28,12 +34,12 @@ class Party(BaseModel):
         through_fields=('party', 'sender'),
         related_name='draw_results',
     )
+    finish_time = models.DateTimeField(
+        "Time when party will be ended"
+    )
 
     # questions - M2M
     # answers - M2M
-
-    def __str__(self):
-        return self.name
 
     class Meta:
         db_table = "party"
@@ -45,7 +51,8 @@ class UserParty(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     party = models.ForeignKey(Party, on_delete=models.CASCADE)
 
-    joined_at = models.DateTimeField(auto_now_add=True)
+    is_confirmed = models.BooleanField(default=False)
+    is_owner = models.BooleanField(default=False)
 
 
 class DrawResult(models.Model):
