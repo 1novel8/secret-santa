@@ -1,3 +1,6 @@
+import os
+import uuid
+from PIL import Image
 from datetime import datetime
 from django.db import models
 from django.utils import timezone
@@ -38,3 +41,13 @@ class BaseModel(models.Model):
     def delete(self, *args, **kwargs):
         self.deleted_at = timezone.now()
         self.save()
+
+
+def generate_unique_image_name(instance, filename):
+    try:
+        img = Image.open(instance.image)
+        ext = img.format.lower() if img.format else None
+    except:
+        return None
+    unique_filename = f'{uuid.uuid4()}.{ext}'
+    return os.path.join('images/', unique_filename)

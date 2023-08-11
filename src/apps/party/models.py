@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.core.models import BaseModel
+from apps.core.models import BaseModel, generate_unique_image_name
 from apps.authentication.models import User
 
 
@@ -18,8 +18,10 @@ class Party(BaseModel):
         null=False,
     )
     image = models.ImageField(
-        upload_to='static/img/parties',
+        upload_to=generate_unique_image_name,
         blank=True,
+        null=True,
+        default=None,
     )
     users = models.ManyToManyField(
         User,
