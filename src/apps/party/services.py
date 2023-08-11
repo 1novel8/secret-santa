@@ -17,6 +17,7 @@ class PartyService(BaseService):
             user=user,
             party=party,
             is_owner=True,
+            is_confirmed=True,
         )
         return party
 
@@ -46,3 +47,13 @@ class PartyService(BaseService):
             self.repository.delete(party)
         else:
             raise PermissionDenied('Only member can work with party\'s question')
+
+    def list(self, **kwargs) -> list:
+        return Party.objects.filter(userparty__user_id=kwargs.get('user').id)
+
+    def invite_user(self, user: User, party: Party):
+        self.repository.add_user(
+            user=user,
+            party=party,
+            is_owner=False,
+        )

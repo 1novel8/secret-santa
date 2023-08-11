@@ -34,6 +34,9 @@ class Party(BaseModel):
         through_fields=('party', 'sender'),
         related_name='draw_results',
     )
+    finish_time = models.DateTimeField(
+        "Time when party will be ended"
+    )
 
     # questions - M2M
     # answers - M2M
@@ -48,7 +51,7 @@ class UserParty(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     party = models.ForeignKey(Party, on_delete=models.CASCADE)
 
-    joined_at = models.DateTimeField(auto_now_add=True)
+    is_confirmed = models.BooleanField(default=False)
     is_owner = models.BooleanField(default=False)
 
 
