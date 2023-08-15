@@ -19,7 +19,7 @@ class BaseRepository:
                 continue
             field_obj = obj._meta.get_field(field)
             if isinstance(field_obj, (models.ManyToManyField, models.ManyToManyRel))\
-                    or 'id' in field:
+                    or 'id' in field or field == 'password':
                 continue
             fields.append(field)
             setattr(obj, field, value)

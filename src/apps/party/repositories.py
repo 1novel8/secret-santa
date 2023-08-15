@@ -16,3 +16,8 @@ class PartyRepository(BaseRepository):
             }
         )
         return party
+
+    def confirm_user(self, user: User, party: Party):
+        party_user = party.users.through.objects.get(user=user, party=party)
+        party_user.is_confirmed = True
+        party_user.save()

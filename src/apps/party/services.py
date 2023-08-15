@@ -42,8 +42,8 @@ class PartyService(BaseService):
         return party.userparty_set.filter(user=user).exists()
 
     def delete(self, pk: int, **kwargs) -> None:
-        party = self.get_by_id(pk=pk)
-        if self.is_owner(party=party.party, user=kwargs.get('user')):
+        party = self.get_by_id(pk=pk, **kwargs)
+        if self.is_owner(party=party, user=kwargs.get('user')):
             self.repository.delete(party)
         else:
             raise PermissionDenied('Only member can work with party\'s question')
@@ -51,9 +51,17 @@ class PartyService(BaseService):
     def list(self, **kwargs) -> list:
         return Party.objects.filter(userparty__user_id=kwargs.get('user').id)
 
-    def invite_user(self, user: User, party: Party):
-        self.repository.add_user(
-            user=user,
-            party=party,
-            is_owner=False,
-        )
+    def invite_user(self, inviter: User, user: User, party: Party):
+        if self.is_owner(party=party, user=inviter):
+            self.repository.add_user(
+                user=user,
+                party=party,
+                is_owner=False,
+            )
+        else:
+            raise PermissionDenied('Only owner can invite users')
+
+    def confirm_user(self, pk: int, user: User):
+        party = self.repository.get_by_id(pk=pk)
+        if self.is_member(user=user, party=party):
+            self.repository.confirm_user(user=user, party=party)
