@@ -8,7 +8,7 @@ from .models import Party
 from .serializers import BasePartySerializer, InviteUserSerializer
 from .services import PartyService
 from apps.core import mixins as custom_mixins
-from .tasks import invite_user_by_email
+from .tasks import invite_user_by_email, remind_users
 from apps.authentication.services import UserService
 
 
@@ -88,4 +88,9 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
             user=self.request.user,
             **kwargs,
         )
+        return Response(status=status.HTTP_200_OK)
+
+    @action(methods=["GET"], detail=False)
+    def test(self, request):
+        remind_users.delay()
         return Response(status=status.HTTP_200_OK)
