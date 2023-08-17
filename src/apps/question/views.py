@@ -5,13 +5,14 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework import status
 
 from .models import Question
-from .serializers import BaseQuestionSerializer
+from .serializers import BaseQuestionSerializer, CreateQuestionSerializer, UpdateQuestionSerializer
 from .services import QuestionService
 from apps.core import mixins as custom_mixins
 
 
 @extend_schema(tags=['question'])
-class QuestionViewSet(custom_mixins.UpdateModelMixin,
+class QuestionViewSet(custom_mixins.SerializeByActionMixin,
+                      custom_mixins.UpdateModelMixin,
                       custom_mixins.RetrieveModelMixin,
                       custom_mixins.CreateModelMixin,
                       custom_mixins.DestroyModelMixin,
@@ -20,6 +21,13 @@ class QuestionViewSet(custom_mixins.UpdateModelMixin,
     service = QuestionService()
     permission_classes = [IsAuthenticated, ]
     queryset = Question.objects.all()
+
+    serialize_by_action = {
+        'retrieve': BaseQuestionSerializer,
+        'create': CreateQuestionSerializer,
+        'partial_update': UpdateQuestionSerializer,
+        'destroy': None,
+    }
 
     http_method_names = ['get', 'patch', 'put', 'post', 'delete']
 

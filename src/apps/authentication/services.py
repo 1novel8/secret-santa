@@ -19,9 +19,7 @@ class UserService(BaseService):
                 user.set_password(kwargs.get('password'))
                 user.save()
         else:
-            print(6)
             user = self.repository.create(**kwargs)
-            print(7)
         return user
 
     def update(self, pk: int, **kwargs) -> User:

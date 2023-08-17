@@ -17,3 +17,6 @@ class PresentService(BaseService):
             is_preferred=is_preferred
         )
         return present
+
+    def list(self, **kwargs) -> list:
+        return self.repository.model.objects.filter(userpresent__user_id=kwargs.get('user').id)

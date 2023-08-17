@@ -49,7 +49,7 @@ class PartyService(BaseService):
             raise PermissionDenied('Only member can work with party\'s question')
 
     def list(self, **kwargs) -> list:
-        return Party.objects.filter(userparty__user_id=kwargs.get('user').id)
+        return self.repository.model.objects.filter(userparty__user_id=kwargs.get('user').id)
 
     def invite_user(self, inviter: User, user: User, party: Party):
         if self.is_owner(party=party, user=inviter):

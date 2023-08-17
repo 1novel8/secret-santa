@@ -52,13 +52,12 @@ def remind_users():
         party_url = f'http://localhost:8000/api/parties/{party.id}/'
         message = f'Your party "{party.name}" will be ended soon! ' \
                   f'You can check it here: {party_url} ' \
-                  f'Or you have last chance to join here: {party_url}/join '
+                  f'Or you have the last chance to join here: {party_url}/join '
         from_email = 'secret_santa@gmail.com'
 
         email_list = list()
         for user in party.users.all():
             email_list.append(user.email)
-        print(email_list)
         send_mail(
             subject=subject,
             message=message,

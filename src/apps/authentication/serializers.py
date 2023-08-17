@@ -22,12 +22,10 @@ class BaseUserSerializer(serializers.ModelSerializer):
 class UpdateUserSerializer(BaseUserSerializer):
 
     class Meta(BaseUserSerializer.Meta):
-        fields = list(BaseUserSerializer.Meta.fields)
-        fields.append('image')
+        pass
 
 
 class RetrieveUserSerializer(BaseUserSerializer):
-    image = serializers.ImageField()
 
     class Meta(BaseUserSerializer.Meta):
         pass
