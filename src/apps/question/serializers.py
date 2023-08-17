@@ -26,3 +26,7 @@ class CreateQuestionSerializer(BaseQuestionSerializer):
 class UpdateQuestionSerializer(BaseQuestionSerializer):
     class Meta(BaseQuestionSerializer.Meta):
         pass
+
+
+class AnswerSerializer(serializers.Serializer):
+    answer = serializers.CharField(max_length=200, required=True)

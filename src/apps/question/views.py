@@ -1,11 +1,12 @@
 from drf_spectacular.utils import extend_schema
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import status
 
 from .models import Question
-from .serializers import BaseQuestionSerializer, CreateQuestionSerializer, UpdateQuestionSerializer
+from .serializers import BaseQuestionSerializer, CreateQuestionSerializer, UpdateQuestionSerializer, AnswerSerializer
 from .services import QuestionService
 from apps.core import mixins as custom_mixins
 
@@ -26,6 +27,8 @@ class QuestionViewSet(custom_mixins.SerializeByActionMixin,
         'retrieve': BaseQuestionSerializer,
         'create': CreateQuestionSerializer,
         'partial_update': UpdateQuestionSerializer,
+        'send_answer': AnswerSerializer,
+        'get_answer': None,
         'destroy': None,
     }
 
@@ -46,3 +49,22 @@ class QuestionViewSet(custom_mixins.SerializeByActionMixin,
     def destroy(self, request, *args, **kwargs):
         self.service.delete(user=self.request.user, **kwargs)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(methods=["POST"], detail=True, url_path='answer')
+    def send_answer(self, request, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        answer = self.service.make_answer(
+            user=self.request.user,
+            pk=kwargs.pop('pk'),
+            **serializer.data,
+        )
+        return Response(status=status.HTTP_200_OK, data=answer)
+
+    @action(methods=["GET"], detail=True, url_path='answer')
+    def get_answer(self, request, **kwargs):
+        answer = self.service.get_answer(
+            user=self.request.user,
+            pk=kwargs.pop('pk')
+        )
+        return Response(status=status.HTTP_200_OK, data=answer)
