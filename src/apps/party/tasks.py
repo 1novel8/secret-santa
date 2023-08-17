@@ -46,7 +46,6 @@ def remind_users():
     parties = (Party.objects
                .filter(Q(finish_time__gte=now) & Q(finish_time__lt=now + timedelta(hours=24)))
                .prefetch_related("users").all())
-    print(parties)
     for party in parties:
         subject = f'Wow it\'s Santa!'
         party_url = f'http://localhost:8000/api/parties/{party.id}/'

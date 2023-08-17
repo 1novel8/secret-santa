@@ -10,6 +10,7 @@ from .serializers import CreateUserSerializer, UpdateUserSerializer, RetrieveUse
 from apps.core.mixins import SerializeByActionMixin, PermissionsByAction
 from apps.core import mixins as custom_mixins
 from .services import UserService
+from .utils import decode_token
 
 
 @extend_schema(tags=['user'])
