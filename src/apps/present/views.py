@@ -25,15 +25,8 @@ class PresentViewSet(mixins.ListModelMixin,
     def perform_create(self, **kwargs):
         return self.service.create(user=self.request.user, **kwargs)
 
-    # def retrieve(self, request, *args, **kwargs):
-    #     obj = self.service.get_by_id(user=self.request.user, **kwargs)
-    #     serializer = self.get_serializer(instance=obj)
-    #
-    #     return Response(serializer.data)
-    #
-    # def perform_update(self, **kwargs):
-    #     return self.service.update(user=self.request.user, **kwargs)
-    #
-    # def destroy(self, request, *args, **kwargs):
-    #     self.service.delete(user=self.request.user, **kwargs)
-    #     return Response(status=status.HTTP_204_NO_CONTENT)
+    def list(self, request, *args, **kwargs):
+        queryset = self.service.list(user=self.request.user, **kwargs)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

@@ -13,9 +13,13 @@ class UserService(BaseService):
             if self.repository.is_email_verified(email=kwargs.get('email')):
                 raise ValidationError('This Email is already in use')
             else:
-                user = self.repository.update_multiple_fields(is_verified=True, **kwargs)
+                user = self.repository.update_multiple_fields(
+                    obj=self.get_by_email(kwargs.get('email')),
+                    **kwargs)
+                user.set_password(kwargs.get('password'))
+                user.save()
         else:
-            user = self.repository.create(is_verified=False, **kwargs)
+            user = self.repository.create(**kwargs)
         return user
 
     def update(self, pk: int, **kwargs) -> User:

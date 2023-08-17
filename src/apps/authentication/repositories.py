@@ -16,5 +16,14 @@ class UserRepository(BaseRepository):
     def is_email_exist(self, email: str) -> bool:
         return self.model.objects.filter(email=email).exists()
 
+    def create(self, **kwargs):
+        password = None
+        if 'password' in kwargs.keys():
+            password = kwargs.pop('password')
+        user = self.model.objects.create(**kwargs)
+        user.set_password(password)
+
+        return user
+
     def is_email_verified(self, email: str) -> bool:
         return self.model.objects.filter(email=email).first().is_verified

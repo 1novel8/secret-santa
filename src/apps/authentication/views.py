@@ -1,3 +1,5 @@
+import base64
+
 from drf_spectacular.utils import extend_schema
 from rest_framework import status, permissions
 from rest_framework.viewsets import GenericViewSet
@@ -8,6 +10,7 @@ from .serializers import CreateUserSerializer, UpdateUserSerializer, RetrieveUse
 from apps.core.mixins import SerializeByActionMixin, PermissionsByAction
 from apps.core import mixins as custom_mixins
 from .services import UserService
+from .utils import decode_token
 
 
 @extend_schema(tags=['user'])
@@ -31,14 +34,19 @@ class UserViewSet(SerializeByActionMixin,
         'partial_update': [permissions.IsAuthenticated],
         'destroy': [permissions.IsAuthenticated],
     }
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (permissions.AllowAny, )
 
     service = UserService()
 
     http_method_names = ['get', 'patch', 'post', 'delete']
 
     def perform_create(self, **kwargs):
-        return self.service.create(**kwargs)
+        if 'token' in self.request.query_params:
+            kwargs['is_verified'] = True
+            kwargs['email'] = decode_token(self.request.query_params.get('token'))
+        else:
+            kwargs['is_verified'] = False
+        return self.service.create(**kwargs, password=self.request.data['password'])
 
     def perform_update(self, **kwargs):
         return self.service.update(user=self.request.user, **kwargs)
