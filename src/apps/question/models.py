@@ -21,7 +21,7 @@ class Question(BaseModel):
     )
 
     answers = models.ManyToManyField(
-        Party,
+        User,
         through='UserPartyQuestionAnswer',
         related_name='answers',
     )

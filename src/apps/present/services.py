@@ -9,7 +9,8 @@ class PresentService(BaseService):
 
     def create(self, **kwargs) -> Present:
         user = kwargs.pop('user')
-        is_preferred = kwargs.pop('user')
+        is_preferred = kwargs.pop('is_preferred')
+
         present = self.repository.create(**kwargs)
         self.repository.add_user(
             user=user,
