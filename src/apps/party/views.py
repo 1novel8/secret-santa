@@ -8,7 +8,7 @@ from .models import Party
 from .serializers import BasePartySerializer, InviteUserSerializer
 from .services import PartyService
 from apps.core import mixins as custom_mixins
-from .tasks import invite_user_by_email, remind_users
+from .tasks import invite_user_by_email, finish_parties
 from apps.authentication.services import UserService
 
 
@@ -32,7 +32,7 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
         'join': None,
     }
 
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
     http_method_names = ['get', 'patch', 'put', 'post', 'delete']
 
@@ -91,6 +91,12 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
         return Response(status=status.HTTP_200_OK)
 
     @action(methods=["GET"], detail=False)
-    def test(self, request):
-        remind_users.delay()
+    def finish(self, request):
+        finish_parties.delay()
+
+        return Response(status=status.HTTP_200_OK)
+
+    @action(methods=["GET"], detail=False)
+    def result(self, request):
+
         return Response(status=status.HTTP_200_OK)

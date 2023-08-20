@@ -26,7 +26,6 @@ class QuestionService(BaseService):
             return question
         raise PermissionDenied('Only member can work with party\'s question')
 
-
     def update(self, pk: int, **kwargs) -> Question:
         question = self.get_by_id(pk=pk, **kwargs)
         if self.party_service.is_owner(party=question.party, user=kwargs.get('user')):
