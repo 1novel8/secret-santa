@@ -5,7 +5,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins, permissions, status
 
 from .models import Party
-from .serializers import BasePartySerializer, InviteUserSerializer
+from .serializers import BasePartySerializer, InviteUserSerializer, ResultSerializer, QuestionAnswerSerializer
 from .services import PartyService
 from apps.core import mixins as custom_mixins
 from .tasks import invite_user_by_email, finish_parties
@@ -30,6 +30,7 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
         'destroy': BasePartySerializer,
         'invite': InviteUserSerializer,
         'join': None,
+        'result': ResultSerializer
     }
 
     permission_classes = (permissions.AllowAny,)
@@ -96,7 +97,14 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
 
         return Response(status=status.HTTP_200_OK)
 
-    @action(methods=["GET"], detail=False)
-    def result(self, request):
-
-        return Response(status=status.HTTP_200_OK)
+    @action(methods=["GET"], detail=True)
+    def result(self, request, **kwargs):
+        receiver, question_answer = self.service.get_result(
+            user=self.request.user,
+            **kwargs,
+        )
+        serializer = self.get_serializer({
+            'receiver': receiver,
+            'answer_list': question_answer,
+        })
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
