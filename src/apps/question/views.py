@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import status
 
-from .models import Question
-from .serializers import BaseQuestionSerializer, CreateQuestionSerializer, UpdateQuestionSerializer, AnswerSerializer
-from .services import QuestionService
+from apps.question.models import Question
+from apps.question.serializers import BaseQuestionSerializer, CreateQuestionSerializer, UpdateQuestionSerializer, AnswerSerializer
+from apps.question.services import QuestionService
 from apps.core import mixins as custom_mixins
 
 

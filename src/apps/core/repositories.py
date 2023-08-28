@@ -1,5 +1,4 @@
-from django.db import models
-from django.db.models import Model, QuerySet
+from django.db.models import Model
 from rest_framework.exceptions import NotFound
 
 

@@ -1,5 +1,3 @@
-from django.db.models import Model
-
 from apps.core.repositories import BaseRepository
 
 

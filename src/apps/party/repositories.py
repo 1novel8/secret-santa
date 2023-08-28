@@ -2,9 +2,9 @@ from django.db.models import Q, F
 from rest_framework.exceptions import NotFound
 
 from apps.core.repositories import BaseRepository
-from .models import Party, UserParty
+from apps.party.models import Party
 from apps.authentication.models import User
-from ..question.models import Question, UserPartyQuestionAnswer
+from apps.question.models import UserPartyQuestionAnswer
 
 
 class PartyRepository(BaseRepository):

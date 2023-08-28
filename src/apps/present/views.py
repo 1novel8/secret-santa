@@ -1,11 +1,11 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from rest_framework import mixins, status
+from rest_framework import mixins
 
-from .models import Present
-from .serializers import BasePresentSerializer
-from .services import PresentService
+from apps.present.models import Present
+from apps.present.serializers import BasePresentSerializer
+from apps.present.services import PresentService
 from apps.core import mixins as custom_mixins
 
 

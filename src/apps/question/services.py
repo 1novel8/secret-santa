@@ -1,8 +1,8 @@
 from rest_framework.exceptions import PermissionDenied
 
 from apps.core.services import BaseService
-from .models import Question
-from .repositories import QuestionRepository
+from apps.question.models import Question
+from apps.question.repositories import QuestionRepository
 from apps.party.services import PartyService
 
 

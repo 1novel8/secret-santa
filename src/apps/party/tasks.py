@@ -1,5 +1,3 @@
-import base64
-
 from random import shuffle
 from datetime import timedelta
 from django.db.models import Q, Count
@@ -7,14 +5,8 @@ from django.utils import timezone
 from celery import shared_task
 from django.core.mail import send_mail
 
+from apps.core.utils import generate_token
 from apps.party.models import Party, DrawResult
-
-
-def generate_token(email):
-    data = f'{email}:{timezone.now()}'
-    token_bytes = data.encode('utf-8')
-    token_base64 = base64.b64encode(token_bytes).decode('utf-8')
-    return token_base64
 
 
 @shared_task()
@@ -88,9 +80,7 @@ def finish_parties():
             users_list.append(user)
 
         shuffle(users_list)
-        print(users_list)
-        for i, _ in enumerate(users_list):
-            sender = users_list[i]
+        for i, sender in enumerate(users_list):
             if i + 1 < len(users_list):
                 receiver = users_list[i + 1]
             else:

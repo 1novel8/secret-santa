@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
-from .models import Party
-from ..authentication.models import User
-from ..question.serializers import BaseQuestionSerializer
+from apps.party.models import Party
+from apps.authentication.models import User
+from apps.question.serializers import BaseQuestionSerializer
 from apps.authentication.serializers import RetrieveUserSerializer
+
 
 class BasePartySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)

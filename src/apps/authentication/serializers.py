@@ -2,7 +2,7 @@ from django.core.validators import validate_email
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from .models import User
+from apps.authentication.models import User
 
 
 class BaseUserSerializer(serializers.ModelSerializer):

@@ -4,12 +4,13 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins, permissions, status
 
-from .models import Party
-from .serializers import BasePartySerializer, InviteUserSerializer, ResultSerializer, QuestionAnswerSerializer
-from .services import PartyService
-from apps.core import mixins as custom_mixins
-from .tasks import invite_user_by_email, finish_parties
+from apps.party.models import Party
+from apps.party.serializers import BasePartySerializer, InviteUserSerializer, ResultSerializer, QuestionAnswerSerializer
+from apps.party.services import PartyService
+
+from apps.party.tasks import invite_user_by_email, finish_parties
 from apps.authentication.services import UserService
+from apps.core import mixins as custom_mixins
 
 
 @extend_schema(tags=['party'])

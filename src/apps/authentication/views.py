@@ -1,16 +1,15 @@
-import base64
-
 from drf_spectacular.utils import extend_schema
 from rest_framework import status, permissions
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 
-from .models import User
-from .serializers import CreateUserSerializer, UpdateUserSerializer, RetrieveUserSerializer
+from apps.authentication.models import User
+from apps.authentication.serializers import CreateUserSerializer, UpdateUserSerializer, RetrieveUserSerializer
+from apps.authentication.services import UserService
+
 from apps.core.mixins import SerializeByActionMixin, PermissionsByAction
 from apps.core import mixins as custom_mixins
-from .services import UserService
-from .utils import decode_token
+from apps.core.utils import decode_token
 
 
 @extend_schema(tags=['user'])

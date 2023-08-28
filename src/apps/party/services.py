@@ -1,4 +1,3 @@
-from django.db.models import F, Q
 from django.utils import timezone
 
 from rest_framework.exceptions import PermissionDenied
@@ -7,7 +6,6 @@ from .models import Party
 from .repositories import PartyRepository
 from apps.core.services import BaseService
 from apps.authentication.models import User
-from ..question.models import Question, UserPartyQuestionAnswer
 
 
 class PartyService(BaseService):
@@ -46,10 +44,7 @@ class PartyService(BaseService):
 
     def is_finished(self, pk: int, **kwargs) -> bool:
         party = self.get_by_id(pk=pk, **kwargs)
-        if party.finish_time <= timezone.now():
-            return True
-        return False
-
+        return party.finish_time <= timezone.now()
     def get_result(self, pk: int, **kwargs) -> tuple:
         party = self.get_by_id(pk=pk, **kwargs)
         receiver = self.repository.get_receiver(party=party, **kwargs)
