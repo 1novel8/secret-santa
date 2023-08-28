@@ -1,6 +1,6 @@
 from rest_framework.routers import SimpleRouter
 
-from apps.present.views import PresentViewSet
+from .views import PresentViewSet
 
 urlpatterns = []
 

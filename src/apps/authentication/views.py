@@ -3,13 +3,11 @@ from rest_framework import status, permissions
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 
-from apps.authentication.models import User
-from apps.authentication.serializers import CreateUserSerializer, UpdateUserSerializer, RetrieveUserSerializer
-from apps.authentication.services import UserService
-
+from .models import User
+from .serializers import CreateUserSerializer, UpdateUserSerializer, RetrieveUserSerializer
 from apps.core.mixins import SerializeByActionMixin, PermissionsByAction
 from apps.core import mixins as custom_mixins
-from apps.core.utils import decode_token
+from .services import UserService
 
 
 @extend_schema(tags=['user'])
@@ -33,19 +31,14 @@ class UserViewSet(SerializeByActionMixin,
         'partial_update': [permissions.IsAuthenticated],
         'destroy': [permissions.IsAuthenticated],
     }
-    permission_classes = (permissions.AllowAny, )
+    permission_classes = (permissions.IsAuthenticated, )
 
     service = UserService()
 
     http_method_names = ['get', 'patch', 'post', 'delete']
 
     def perform_create(self, **kwargs):
-        if 'token' in self.request.query_params:
-            kwargs['is_verified'] = True
-            kwargs['email'] = decode_token(self.request.query_params.get('token'))
-        else:
-            kwargs['is_verified'] = False
-        return self.service.create(**kwargs, password=self.request.data['password'])
+        return self.service.create(**kwargs)
 
     def perform_update(self, **kwargs):
         return self.service.update(user=self.request.user, **kwargs)

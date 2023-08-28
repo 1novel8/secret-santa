@@ -1,3 +1,5 @@
+from django.db.models import Model
+
 from apps.core.repositories import BaseRepository
 
 
@@ -14,6 +16,6 @@ class BaseService:
     def get_by_id(self, pk: int, **kwargs):
         return self.repository.get_by_id(pk)
 
-    def delete(self, pk: int, **kwargs) -> None:
+    def delete(self, pk: int) -> None:
         obj = self.repository.get_by_id(pk)
         self.repository.delete(obj)

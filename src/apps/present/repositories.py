@@ -1,7 +1,7 @@
 from apps.core.repositories import BaseRepository
 
-from apps.present.models import Present
-from apps.authentication.models import User
+from .models import Present
+from ..authentication.models import User
 
 
 class PresentRepository(BaseRepository):

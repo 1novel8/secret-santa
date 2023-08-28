@@ -1,5 +1,5 @@
 from rest_framework.routers import SimpleRouter
-from apps.question.views import QuestionViewSet
+from .views import QuestionViewSet
 
 urlpatterns = []
 

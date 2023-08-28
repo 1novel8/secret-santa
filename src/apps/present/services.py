@@ -1,7 +1,7 @@
 from apps.core.services import BaseService
-from apps.present.models import Present
+from .models import Present
 
-from apps.present.repositories import PresentRepository
+from .repositories import PresentRepository
 
 
 class PresentService(BaseService):
@@ -9,8 +9,7 @@ class PresentService(BaseService):
 
     def create(self, **kwargs) -> Present:
         user = kwargs.pop('user')
-        is_preferred = kwargs.pop('is_preferred')
-
+        is_preferred = kwargs.pop('user')
         present = self.repository.create(**kwargs)
         self.repository.add_user(
             user=user,
@@ -18,6 +17,3 @@ class PresentService(BaseService):
             is_preferred=is_preferred
         )
         return present
-
-    def list(self, **kwargs) -> list:
-        return self.repository.model.objects.filter(userpresent__user_id=kwargs.get('user').id)

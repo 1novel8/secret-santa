@@ -2,8 +2,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularRedocView, SpectacularSwaggerView, SpectacularAPIView
-from django.conf import settings
 
+from django.conf import settings
 
 api = [
     path('', include('apps.authentication.urls')),
@@ -20,6 +20,4 @@ urlpatterns = [
     # general
     path('admin/', admin.site.urls),
     path('api/', include(api)),
-    # django-debug-toolbar
-    path('__debug__/', include("debug_toolbar.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

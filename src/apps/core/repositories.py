@@ -1,4 +1,5 @@
-from django.db.models import Model
+from django.db import models
+from django.db.models import Model, QuerySet
 from rest_framework.exceptions import NotFound
 
 
@@ -15,6 +16,10 @@ class BaseRepository:
         fields = []
         for field, value in kwargs.items():
             if not hasattr(obj, field):
+                continue
+            field_obj = obj._meta.get_field(field)
+            if isinstance(field_obj, (models.ManyToManyField, models.ManyToManyRel))\
+                    or 'id' in field:
                 continue
             fields.append(field)
             setattr(obj, field, value)

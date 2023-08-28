@@ -8,7 +8,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update
-RUN apt-get install -y curl
+
 # install dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip

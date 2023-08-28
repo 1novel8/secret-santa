@@ -1,8 +1,6 @@
-from django.core.validators import validate_email
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
-from apps.authentication.models import User
+from .models import User
 
 
 class BaseUserSerializer(serializers.ModelSerializer):
@@ -22,10 +20,12 @@ class BaseUserSerializer(serializers.ModelSerializer):
 class UpdateUserSerializer(BaseUserSerializer):
 
     class Meta(BaseUserSerializer.Meta):
-        pass
+        fields = list(BaseUserSerializer.Meta.fields)
+        fields.append('image')
 
 
 class RetrieveUserSerializer(BaseUserSerializer):
+    image = serializers.ImageField()
 
     class Meta(BaseUserSerializer.Meta):
         pass
@@ -37,7 +37,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
         min_length=8,
         write_only=True
     )
-    email = serializers.CharField(max_length=200, required=False)
 
     class Meta(BaseUserSerializer.Meta):
         fields = list(BaseUserSerializer.Meta.fields)
@@ -46,12 +45,3 @@ class CreateUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
 
-    def validate_email(self, value):
-        """
-        Проверка на корректность email и дополнительная проверка, если нужно.
-        """
-        try:
-            validate_email(value)
-            return value
-        except ValidationError:
-            raise serializers.ValidationError("Invalid email address")

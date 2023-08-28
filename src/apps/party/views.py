@@ -4,13 +4,13 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins, permissions, status
 
-from apps.party.models import Party
-from apps.party.serializers import BasePartySerializer, InviteUserSerializer, ResultSerializer, QuestionAnswerSerializer
-from apps.party.services import PartyService
-
-from apps.party.tasks import invite_user_by_email, finish_parties
-from apps.authentication.services import UserService
+from .models import Party
+from .serializers import BasePartySerializer, InviteUserSerializer
+from .services import PartyService
 from apps.core import mixins as custom_mixins
+from .tasks import send_email
+from ..authentication.models import User
+from ..authentication.services import UserService
 
 
 @extend_schema(tags=['party'])
@@ -30,11 +30,9 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
         'partial_update': BasePartySerializer,
         'destroy': BasePartySerializer,
         'invite': InviteUserSerializer,
-        'join': None,
-        'result': ResultSerializer
     }
 
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated, )
 
     http_method_names = ['get', 'patch', 'put', 'post', 'delete']
 
@@ -57,55 +55,23 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
         return Response(serializer.data)
 
     def destroy(self, request, *args, **kwargs):
-        self.service.delete(user=self.request.user, **kwargs)
+        self.service.delete(user=kwargs.get('user'), **kwargs)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=["POST"], detail=True, url_path='invite')
     def invite(self, request, **kwargs):
         user_service = UserService()
-        party = self.service.get_by_id(user=self.request.user, **kwargs)
-
-        if user_service.is_email_exist(**request.data):
+        user = None
+        try:
             user = user_service.get_by_email(**request.data)
-        else:
+        except:
             user = user_service.create(**request.data)
+        finally:
+            self.service.invite_user(
+                user=user,
+                party=self.service.get_by_id(user=self.request.user,**kwargs),
+            )
+            send_email.delay(**request.data)
+            return Response(status=status.HTTP_200_OK)
 
-        self.service.invite_user(
-            inviter=self.request.user,
-            user=user,
-            party=self.service.get_by_id(user=self.request.user, **kwargs),
-        )
-        invite_user_by_email.delay(
-            party_id=party.id,
-            party_name=party.name,
-            **request.data
-        )
-
-        return Response(status=status.HTTP_200_OK)
-
-    @action(methods=["POST"], detail=True, url_path='join')
-    def join(self, request, **kwargs):
-        self.service.confirm_user(
-            user=self.request.user,
-            **kwargs,
-        )
-        return Response(status=status.HTTP_200_OK)
-
-    @action(methods=["GET"], detail=False)
-    def finish(self, request):
-        finish_parties.delay()
-
-        return Response(status=status.HTTP_200_OK)
-
-    @action(methods=["GET"], detail=True)
-    def result(self, request, **kwargs):
-        receiver, question_answer = self.service.get_result(
-            user=self.request.user,
-            **kwargs,
-        )
-        serializer = self.get_serializer({
-            'receiver': receiver,
-            'answer_list': question_answer,
-        })
-        return Response(status=status.HTTP_200_OK, data=serializer.data)

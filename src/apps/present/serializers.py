@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.present.models import Present
+from .models import Present
 
 
 class BasePresentSerializer(serializers.ModelSerializer):
