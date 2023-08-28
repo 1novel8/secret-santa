@@ -1,6 +1,6 @@
 from rest_framework.routers import SimpleRouter
 
-from .views import PartyViewSet
+from apps.party.views import PartyViewSet
 
 urlpatterns = []
 

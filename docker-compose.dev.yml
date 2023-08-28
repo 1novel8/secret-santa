@@ -1,23 +1,6 @@
 version: '3.9'
 
 services:
-  app:
-    container_name: "secret_santa"
-    hostname: secret_santa_host
-    depends_on: [ db ]
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
-    command: sh -c '
-      python manage.py makemigrations;
-      python manage.py migrate;
-      python manage.py runserver 0.0.0.0:8000'
-    env_file:
-      - .env
-    volumes:
-      - .:/secret_santa/
 
   db:
     image: postgres
@@ -27,34 +10,6 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - .env
-
-  worker:
-    build:
-      context: .
-    hostname: worker
-    command: celery -A api worker --loglevel=info
-    volumes:
-      - .:/secret_santa/
-    depends_on:
-      - app
-      - redis
-
-  flower:
-    build:
-      context: .
-    hostname: worker
-    command: celery -A api flower
-    volumes:
-      - .:/secret_santa/
-    depends_on:
-      - app
-      - redis
-    ports:
-      - "5555:5555"
-
-  redis:
-    image: redis
-    restart: always
 
 volumes:
   postgres_data:
