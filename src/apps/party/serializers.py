@@ -10,6 +10,7 @@ class BasePartySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     image = serializers.ImageField(required=False)
     questions = BaseQuestionSerializer(many=True, read_only=True)
+    users = RetrieveUserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Party
