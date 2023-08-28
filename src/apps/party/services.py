@@ -1,10 +1,11 @@
+from django.utils import timezone
+
 from rest_framework.exceptions import PermissionDenied
 
 from .models import Party
 from .repositories import PartyRepository
 from apps.core.services import BaseService
 from apps.authentication.models import User
-from apps.question.models import Question
 
 
 class PartyService(BaseService):
@@ -40,6 +41,16 @@ class PartyService(BaseService):
 
     def is_member(self, user: User, party: Party) -> bool:
         return party.userparty_set.filter(user=user).exists()
+
+    def is_finished(self, pk: int, **kwargs) -> bool:
+        party = self.get_by_id(pk=pk, **kwargs)
+        return party.finish_time <= timezone.now()
+    def get_result(self, pk: int, **kwargs) -> tuple:
+        party = self.get_by_id(pk=pk, **kwargs)
+        receiver = self.repository.get_receiver(party=party, **kwargs)
+        user_question_answers = self.repository.get_question_answer(party, **kwargs)
+
+        return receiver, user_question_answers
 
     def delete(self, pk: int, **kwargs) -> None:
         party = self.get_by_id(pk=pk, **kwargs)

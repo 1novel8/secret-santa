@@ -2,7 +2,7 @@ from rest_framework.generics import get_object_or_404
 
 from apps.core.repositories import BaseRepository
 
-from .models import Question, UserPartyQuestionAnswer
+from apps.question.models import Question, UserPartyQuestionAnswer
 from apps.authentication.models import User
 from apps.party.models import Party
 

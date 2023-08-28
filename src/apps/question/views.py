@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import status
 
-from .models import Question
-from .serializers import BaseQuestionSerializer, CreateQuestionSerializer, UpdateQuestionSerializer, AnswerSerializer
-from .services import QuestionService
+from apps.question.models import Question
+from apps.question.serializers import BaseQuestionSerializer, CreateQuestionSerializer, UpdateQuestionSerializer, AnswerSerializer
+from apps.question.services import QuestionService
 from apps.core import mixins as custom_mixins
 
 
@@ -50,7 +50,7 @@ class QuestionViewSet(custom_mixins.SerializeByActionMixin,
         self.service.delete(user=self.request.user, **kwargs)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @action(methods=["POST"], detail=True, url_path='answer')
+    @action(methods=["POST"], detail=True, url_path='send_answer')
     def send_answer(self, request, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -61,7 +61,7 @@ class QuestionViewSet(custom_mixins.SerializeByActionMixin,
         )
         return Response(status=status.HTTP_200_OK, data=answer)
 
-    @action(methods=["GET"], detail=True, url_path='answer')
+    @action(methods=["GET"], detail=True, url_path='get_answer')
     def get_answer(self, request, **kwargs):
         answer = self.service.get_answer(
             user=self.request.user,

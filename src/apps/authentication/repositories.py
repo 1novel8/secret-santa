@@ -22,6 +22,7 @@ class UserRepository(BaseRepository):
             password = kwargs.pop('password')
         user = self.model.objects.create(**kwargs)
         user.set_password(password)
+        user.save()
 
         return user
 

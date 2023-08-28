@@ -4,12 +4,13 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins, permissions, status
 
-from .models import Party
-from .serializers import BasePartySerializer, InviteUserSerializer
-from .services import PartyService
-from apps.core import mixins as custom_mixins
-from .tasks import invite_user_by_email, remind_users
+from apps.party.models import Party
+from apps.party.serializers import BasePartySerializer, InviteUserSerializer, ResultSerializer, QuestionAnswerSerializer
+from apps.party.services import PartyService
+
+from apps.party.tasks import invite_user_by_email, finish_parties
 from apps.authentication.services import UserService
+from apps.core import mixins as custom_mixins
 
 
 @extend_schema(tags=['party'])
@@ -30,9 +31,10 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
         'destroy': BasePartySerializer,
         'invite': InviteUserSerializer,
         'join': None,
+        'result': ResultSerializer
     }
 
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
     http_method_names = ['get', 'patch', 'put', 'post', 'delete']
 
@@ -91,6 +93,19 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
         return Response(status=status.HTTP_200_OK)
 
     @action(methods=["GET"], detail=False)
-    def test(self, request):
-        remind_users.delay()
+    def finish(self, request):
+        finish_parties.delay()
+
         return Response(status=status.HTTP_200_OK)
+
+    @action(methods=["GET"], detail=True)
+    def result(self, request, **kwargs):
+        receiver, question_answer = self.service.get_result(
+            user=self.request.user,
+            **kwargs,
+        )
+        serializer = self.get_serializer({
+            'receiver': receiver,
+            'answer_list': question_answer,
+        })
+        return Response(status=status.HTTP_200_OK, data=serializer.data)

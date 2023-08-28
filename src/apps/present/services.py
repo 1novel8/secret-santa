@@ -1,7 +1,7 @@
 from apps.core.services import BaseService
-from .models import Present
+from apps.present.models import Present
 
-from .repositories import PresentRepository
+from apps.present.repositories import PresentRepository
 
 
 class PresentService(BaseService):
