@@ -32,7 +32,10 @@ class PartyService(BaseService):
     def get_by_id(self, pk: int, **kwargs):
         obj = self.repository.get_by_id(pk=pk)
         if self.is_member(user=kwargs.get('user'), party=obj):
-            return obj
+            if self.is_owner(user=kwargs.get('user'), party=obj):
+                return obj, True
+            else:
+                return obj, False
         else:
             raise PermissionDenied('View party can only members')
 
@@ -45,6 +48,7 @@ class PartyService(BaseService):
     def is_finished(self, pk: int, **kwargs) -> bool:
         party = self.get_by_id(pk=pk, **kwargs)
         return party.finish_time <= timezone.now()
+
     def get_result(self, pk: int, **kwargs) -> tuple:
         party = self.get_by_id(pk=pk, **kwargs)
         receiver = self.repository.get_receiver(party=party, **kwargs)

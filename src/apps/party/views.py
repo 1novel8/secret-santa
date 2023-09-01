@@ -51,8 +51,8 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
         return self.service.update(user=self.request.user, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
-        obj = self.service.get_by_id(user=self.request.user, **kwargs)
-        serializer = self.get_serializer(instance=obj)
+        obj, is_owner = self.service.get_by_id(user=self.request.user, **kwargs)
+        serializer = self.get_serializer(instance=obj, context={'is_owner': is_owner})
 
         return Response(serializer.data)
 

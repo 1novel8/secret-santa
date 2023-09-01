@@ -1,0 +1,110 @@
+* {
+    font-family: 'Arial';
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+    max-width: 100%
+}
+
+body, html {
+    overflow-x: hidden;
+}
+
+.oval-background {
+    position: relative;
+    width: 300px; /* Задайте ширину и высоту по вашему усмотрению */
+    height: 200px;
+    background-color: #e57a36; /* Цвет овала */
+}
+
+.oval-background::before {
+    content: "";
+    position: absolute;
+    top: 50%; /* Расположение по вертикали */
+    left: 50%; /* Расположение по горизонтали */
+    transform: translate(-50%, -50%); /* Центрирование */
+    width: 100%;
+    padding-top: 50%; /* Соотношение сторон для овала */
+    border-radius: 50%; /* Создание овала */
+    background-color: white; /* Цвет овального фона */
+    z-index: -1; /* Помещение под задний фон */
+}
+
+.big-text {
+    font-size: 68px;
+}
+
+main {
+    text-align: center;
+    padding: 20px;
+    margin-left: auto;
+}
+
+header {
+    background-color: #e57a36; /* Цвет фона */
+    color: white ; /* Цвет текста */
+    padding: 10px 20px; /* Внутренние отступы */
+    display: flex; /* Размещение содержимого в строку */
+    justify-content: normal;
+    align-items: center; /* Выравнивание по вертикали */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2); /* Тень */
+    margin: 0;
+    height: 40px;
+    font-size: 32px;
+}
+
+.link-no-style {
+    text-decoration: none;
+    color: inherit;
+    vertical-align: bottom;
+}
+.link-no-style:last-child {
+    margin-left: auto;
+}
+
+.usual-link {
+    font-size: 24px;
+}
+.link-no-style:active {
+    color: black;
+}
+
+.oval-button {
+    border-radius: 12px;
+    background-color: #e04745;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    font-size: 24px;
+    margin: 4px 2px;
+    opacity: 1;
+    transition: 0.3s;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.oval-button:hover {opacity: 0.85}
+
+.filler{
+    font-size: 24px;
+    margin: 10px 200px;
+}
+
+.page-container {
+    margin: auto;
+    display: flex;
+    align-items: normal;
+    max-width: 100%;
+}
+
+.left-column,
+.right-column {
+    width: 25%; /* Задает ширину левой и правой колонки */
+}
+
+.content {
+    flex: 1; /* Занимает оставшееся пространство */
+    width: 60%;
+}

@@ -11,6 +11,7 @@ class BasePartySerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False)
     questions = BaseQuestionSerializer(many=True, read_only=True)
     users = RetrieveUserSerializer(many=True, read_only=True)
+    is_owner = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Party
@@ -23,7 +24,14 @@ class BasePartySerializer(serializers.ModelSerializer):
             'draw_results',
             'questions',
             'finish_time',
+            'is_owner'
         ]
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        is_owner = self.context.get('is_owner')
+        representation['is_owner'] = is_owner
+        return representation
 
     # users
     # draw_results

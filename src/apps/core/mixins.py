@@ -70,7 +70,7 @@ class CreateModelMixin:
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        obj = self.perform_create(**kwargs, **serializer.data)
+        obj = self.perform_create(**kwargs, **serializer.validated_data)
 
         serializer = self.get_serializer(instance=obj)
         headers = self.get_success_headers(serializer.data)
