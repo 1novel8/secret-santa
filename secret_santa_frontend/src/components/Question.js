@@ -4,6 +4,7 @@ import {QUESTION_URL} from "../utils/urls";
 import toast from "react-hot-toast";
 import {AiFillDelete} from "react-icons/ai";
 import {GrEdit} from "react-icons/gr";
+import EditQuestionForm from "./EditQuestionForm";
 
 function Question({updateParty, isOwner, question}) {
     const [answer, setAnswer] = useState('')
@@ -59,7 +60,8 @@ function Question({updateParty, isOwner, question}) {
                 <div>
                     <AiFillDelete onClick={onDeleteQuestion}/>
                     <GrEdit onClick={() => {
-                        if(editQuestion)
+                        console.log(editQuestion)
+                        if(editQuestion===true)
                             setEditQuestion(false)
                         else
                             setEditQuestion(true)
@@ -68,7 +70,7 @@ function Question({updateParty, isOwner, question}) {
             }
             {editQuestion ?
                 <div>
-
+                    <EditQuestionForm updateParty={updateParty} setEditQuestion={setEditQuestion} questionId={question.id} old_name={question.name} old_text={question.text}/>
                 </div>
                 :<div>
                     <h2 className="question-name">{question.name}</h2>

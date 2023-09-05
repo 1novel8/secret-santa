@@ -10,12 +10,14 @@ import PartyForm from "../components/PartyForm";
 import {axiosInstance} from "../utils/axios";
 import {PARTY_URL} from "../utils/urls";
 import QuestionForm from "../components/QuestionForm";
+import InviteForm from "../components/InviteForm";
 
 function PartyPage({isLoggedIn, setIsLoggedIn}){
     const [partyId, setPartyId] = useState(null);
     const [party, setParty] = useState(null);
     const [partyModalActive, setPartyModalActive] = useState(false)
     const [questionModalActive, setQuestionModelActive] = useState(false)
+    const [inviteModalActive, setInviteModelActive] = useState(false)
     const [partyList, setPartyList] = useState([]);
 
     const fetchPartyList = () => {
@@ -57,12 +59,14 @@ function PartyPage({isLoggedIn, setIsLoggedIn}){
                     </aside>
                     <main className="content">
                         {party ?
-                            <Party setQuestionModalActive={setQuestionModelActive} updateParty={fetchParty} updatePartyList={fetchPartyList} key={party.id} party={party}/> :
+                            <Party setParty={setParty} setQuestionModalActive={setQuestionModelActive} updateParty={fetchParty} updatePartyList={fetchPartyList} key={party.id} party={party}/> :
                             <h2>Выберите группу из списка</h2>
                         }
                     </main>
                     <aside className="right-column">
-                        <button className="oval-button">Пригласить участника</button>
+                        {party && party.is_owner &&
+                            <button className="oval-button" onClick={() =>{setInviteModelActive(true)}} >Пригласить участника</button>
+                        }
                         {party ?
                             <UserList userList={party.users}/> :
                             <h2>Вы пока никого не добавили в группу</h2>
@@ -74,6 +78,9 @@ function PartyPage({isLoggedIn, setIsLoggedIn}){
                 </Modal>
                 <Modal active={questionModalActive} setActive={setQuestionModelActive}>
                     <QuestionForm setActiveModal={setQuestionModelActive} updateParty={fetchParty} partyId={partyId}/>
+                </Modal>
+                <Modal active={inviteModalActive} setActive={setInviteModelActive}>
+                    <InviteForm setActiveModal={setInviteModelActive} updateParty={fetchParty} partyId={partyId}/>
                 </Modal>
             </div>
         )}

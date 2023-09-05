@@ -5,7 +5,8 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins, permissions, status
 
 from apps.party.models import Party
-from apps.party.serializers import BasePartySerializer, InviteUserSerializer, ResultSerializer, QuestionAnswerSerializer
+from apps.party.serializers import BasePartySerializer, InviteUserSerializer, ResultSerializer, \
+    QuestionAnswerSerializer, ListPartySerializer
 from apps.party.services import PartyService
 
 from apps.party.tasks import invite_user_by_email, finish_parties
@@ -25,6 +26,7 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
     serializer_class = BasePartySerializer
     service = PartyService()
     serialize_by_action = {
+        'list': ListPartySerializer,
         'retrieve': BasePartySerializer,
         'create': BasePartySerializer,
         'partial_update': BasePartySerializer,
@@ -51,7 +53,8 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
         return self.service.update(user=self.request.user, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
-        obj, is_owner = self.service.get_by_id(user=self.request.user, **kwargs)
+        obj = self.service.get_by_id(user=self.request.user, **kwargs)
+        is_owner = self.service.is_owner(user=self.request.user, party=obj)
         serializer = self.get_serializer(instance=obj, context={'is_owner': is_owner})
 
         return Response(serializer.data)

@@ -1,11 +1,9 @@
 import {useState} from "react";
 import Modal from "../components/Modal";
-import toast from "react-hot-toast";
 import LoginForm from "../components/LoginForm";
 import RegisterForm from "../components/RegisterForm";
 import "../css/general.css"
 import "../css/homepage.css"
-import PartyList from "../components/PartyList";
 
 function HomePage({isLoggedIn, setIsLoggedIn}){
     const [authModalActive, setAuthModalActive] = useState(false)

@@ -32,10 +32,7 @@ class PartyService(BaseService):
     def get_by_id(self, pk: int, **kwargs):
         obj = self.repository.get_by_id(pk=pk)
         if self.is_member(user=kwargs.get('user'), party=obj):
-            if self.is_owner(user=kwargs.get('user'), party=obj):
-                return obj, True
-            else:
-                return obj, False
+            return obj
         else:
             raise PermissionDenied('View party can only members')
 

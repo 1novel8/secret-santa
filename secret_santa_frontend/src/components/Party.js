@@ -4,19 +4,31 @@ import QuestionList from "./QuestionList";
 import {GrEdit} from "react-icons/gr";
 import {useState} from "react";
 import EditPartyForm from "./EditPartyForm";
+import {AiFillDelete} from "react-icons/ai";
+import {axiosInstance} from "../utils/axios";
+import {PARTY_URL} from "../utils/urls";
+import toast from "react-hot-toast";
 
-function Image({ imageUrl }) {
-    return (
-        <div className="big-image-container">
-            <img src={imageUrl} alt=":)" className="big-rounded-image"/>
-        </div>
-    );
-}
 
 const timeZone = 'Europe/Minsk';
 
-function Party({setQuestionModalActive, updateParty, updatePartyList, party}){
+function Party({setParty, setQuestionModalActive, updateParty, updatePartyList, party}){
     const [editParty, setEditParty] = useState(false)
+
+    const onDeleteParty = (event) =>{
+        event.preventDefault();
+        axiosInstance.delete(
+            PARTY_URL + party.id +'/'
+        ).then(response => {
+            setParty(null);
+            updatePartyList();
+            toast.success("Группа Удалена")
+
+        }).catch(error => {
+            toast.error("Что-то пошло не так")
+            console.error('Error fetching data:', error);
+        });
+    }
 
     return(
         <div className="party-container">
@@ -26,12 +38,15 @@ function Party({setQuestionModalActive, updateParty, updatePartyList, party}){
                 </div>
                 <div className="party-block">
                     {party.is_owner &&
-                        <GrEdit onClick={()=>{
-                            console.log(editParty)
-                            if (editParty===true)
-                                setEditParty(false);
-                            setEditParty(true)
-                        }}/>
+                        <div>
+                            <AiFillDelete onClick={onDeleteParty}/>
+                            <GrEdit onClick={()=>{
+                                if (editParty===true)
+                                    setEditParty(false);
+                                else
+                                    setEditParty(true)
+                            }}/>
+                        </div>
                     }
                     {editParty ?
                         <div>

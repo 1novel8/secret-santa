@@ -33,10 +33,19 @@ class BasePartySerializer(serializers.ModelSerializer):
         representation['is_owner'] = is_owner
         return representation
 
-    # users
-    # draw_results
-    # questions - M2M
-    # answers - M2M
+
+class ListPartySerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    image = serializers.ImageField(required=False)
+    class Meta:
+        model = Party
+        fields = [
+            'id',
+            'name',
+            'description',
+            'image',
+            'image',
+        ]
 
 
 class InviteUserSerializer(serializers.ModelSerializer):

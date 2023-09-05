@@ -1,7 +1,3 @@
-import {useEffect, useState} from "react";
-import {axiosInstance} from "../utils/axios";
-import {PARTY_URL} from "../utils/urls"
-import {NavLink} from "react-router-dom";
 import "../css/homepage.css"
 
 

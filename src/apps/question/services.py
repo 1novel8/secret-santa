@@ -14,8 +14,8 @@ class QuestionService(BaseService):
     def create(self, **kwargs) -> Question:
         user = kwargs.pop('user')
         party = self.party_service.get_by_id(pk=kwargs.pop('party_id'), user=user)
-        if self.party_service.is_owner(party=party[0], user=user):
-            question = super().create(**kwargs, party=party[0])
+        if self.party_service.is_owner(party=party, user=user):
+            question = super().create(**kwargs, party=party)
             return question
         raise PermissionDenied("Only owner can add questions to the party")
 
