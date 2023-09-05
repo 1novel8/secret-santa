@@ -57,5 +57,4 @@ class QuestionService(BaseService):
 
         question = self.get_by_id(pk=pk, user=user)
         answer = self.repository.get_answer(question=question, user=user)
-
         return answer

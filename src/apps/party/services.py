@@ -45,6 +45,7 @@ class PartyService(BaseService):
     def is_finished(self, pk: int, **kwargs) -> bool:
         party = self.get_by_id(pk=pk, **kwargs)
         return party.finish_time <= timezone.now()
+
     def get_result(self, pk: int, **kwargs) -> tuple:
         party = self.get_by_id(pk=pk, **kwargs)
         receiver = self.repository.get_receiver(party=party, **kwargs)
