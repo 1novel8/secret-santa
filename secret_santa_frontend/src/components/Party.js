@@ -56,7 +56,7 @@ function Party({setParty, setQuestionModalActive, updateParty, updatePartyList, 
                         <div>
                             <h1>{party.name}</h1>
                             <h2>{party.description}</h2>
-                            <div>{party.is_owner ? <p>Владелец</p> :<p> Участник</p>}</div>
+                            <div>{party.is_owner ? <p> Вы Владелец</p> :<p> Вы Участник</p>}</div>
                             <h3>Закончится: {party.finish_time && format(utcToZonedTime(toDate(party.finish_time), timeZone), 'dd.MM.yyyy HH:mm')}</h3>
                         </div>
                     }

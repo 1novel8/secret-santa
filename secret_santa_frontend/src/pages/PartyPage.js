@@ -1,6 +1,6 @@
 import "../css/general.css"
 import "../css/homepage.css"
-import {Navigate} from "react-router-dom";
+import {Navigate, useSearchParams} from "react-router-dom";
 import Party from "../components/Party";
 import PartyList from "../components/PartyList";
 import {useEffect, useState} from "react";
@@ -19,6 +19,7 @@ function PartyPage({isLoggedIn, setIsLoggedIn}){
     const [questionModalActive, setQuestionModelActive] = useState(false)
     const [inviteModalActive, setInviteModelActive] = useState(false)
     const [partyList, setPartyList] = useState([]);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const fetchPartyList = () => {
         axiosInstance.get(PARTY_URL)
@@ -55,7 +56,7 @@ function PartyPage({isLoggedIn, setIsLoggedIn}){
                 <div className="page-container">
                     <aside className="left-column">
                         <button className="oval-button" onClick={() =>{setPartyModalActive(true)}}>Создать группу</button>
-                        <PartyList partyList={partyList} setPartyId={setPartyId}/>
+                        <PartyList updatePartyList={fetchPartyList} partyList={partyList} setPartyId={setPartyId}/>
                     </aside>
                     <main className="content">
                         {party ?
@@ -82,6 +83,9 @@ function PartyPage({isLoggedIn, setIsLoggedIn}){
                 <Modal active={inviteModalActive} setActive={setInviteModelActive}>
                     <InviteForm setActiveModal={setInviteModelActive} updateParty={fetchParty} partyId={partyId}/>
                 </Modal>
+                {/*<Modal active={inviteModalActive} setActive={setInviteModelActive}>*/}
+                {/*    <JoinForm setActiveModal={setInviteModelActive} updateParty={fetchParty} partyId={partyId}/>*/}
+                {/*</Modal>*/}
             </div>
         )}
     return (<Navigate to="/"/>)

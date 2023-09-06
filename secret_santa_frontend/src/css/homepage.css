@@ -46,6 +46,11 @@
     background-color: white;
     transition: background-color 0.3s;
 }
+
+.not_confirmed{
+    background-color: #9ed7e1;
+}
+
 .party-item:hover {
     background-color: rgba(63, 179, 158, 0.11); /* Изменение фона при наведении */
 }
