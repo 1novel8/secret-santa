@@ -1,3 +1,5 @@
+import {BASE_URL} from "../utils/urls";
+
 function User({user}){
 
     return(
@@ -5,7 +7,7 @@ function User({user}){
             { user &&
             <div>
                 <div className="big-image-container">
-                    <img src={'http://127.0.0.1:8000/'+user.image} alt=":)" className="big-rounded-image"/>
+                    <img src={BASE_URL+user.image} alt=":)" className="big-rounded-image"/>
                 </div>
                 <div className="party-block">
                     <div>
