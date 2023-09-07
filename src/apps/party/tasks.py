@@ -4,16 +4,17 @@ from django.db.models import Q, Count
 from django.utils import timezone
 from celery import shared_task
 from django.core.mail import send_mail
+from django.conf import settings
 
 from apps.core.utils import generate_token
 from apps.party.models import Party, DrawResult
 
 
 @shared_task()
-def invite_user_by_email(email, party_id, party_name):
+def invite_user_by_email(email, party_name):
     subject = f'Hi! You was invited to Secret Santa Party named "{party_name}"!'
 
-    register_url = f'http://localhost:3000/?token={generate_token(email)}'
+    register_url = f'{settings.FRONT_URL}?token={generate_token(email)}'
 
     message = f'If you have no account yet' \
               f'register here: ' \

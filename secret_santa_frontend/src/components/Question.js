@@ -60,7 +60,6 @@ function Question({updateParty, isOwner, question}) {
                 <div>
                     <AiFillDelete onClick={onDeleteQuestion}/>
                     <GrEdit onClick={() => {
-                        console.log(editQuestion)
                         if(editQuestion===true)
                             setEditQuestion(false)
                         else

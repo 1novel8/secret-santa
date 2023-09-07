@@ -96,4 +96,4 @@ function RegisterForm({token, setRegisterForm}) {
     )
 }
 
-export default RegisterForm
+export default RegisterForm;

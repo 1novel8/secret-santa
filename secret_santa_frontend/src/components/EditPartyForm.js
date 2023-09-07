@@ -58,4 +58,4 @@ function EditPartyForm({updatePartyList, id, old_name, old_description}) {
     )
 }
 
-export default EditPartyForm
+export default EditPartyForm;

@@ -11,12 +11,13 @@ class PartyRepository(BaseRepository):
     model = Party
 
     def list(self, **kwargs):
-        return (self.model.objects.filter(userparty__user_id=kwargs.get('user').id)
-                .prefetch_related('userparty').values('id',
-                                                      'name',
-                                                      'description',
-                                                      'image',
-                                                      is_confirmed=F('userparty__is_confirmed')))
+        party_list = (self.model.objects.filter(userparty__user_id=kwargs.get('user').id)
+                      .prefetch_related('userparty').values('id',
+                                                            'name',
+                                                            'description',
+                                                            'image',
+                                                            is_confirmed=F('userparty__is_confirmed')))
+        return party_list
 
     def add_user(self, user: User, party: Party, is_owner=False, is_confirmed=False) -> Party:
         party.users.add(

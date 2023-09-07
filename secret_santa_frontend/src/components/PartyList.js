@@ -70,4 +70,4 @@ function PartyList({updatePartyList, partyList, setPartyId}) {
     )
 }
 
-export default PartyList
+export default PartyList;

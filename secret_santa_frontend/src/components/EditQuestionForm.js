@@ -23,7 +23,6 @@ function EditQuestionForm({setEditQuestion, updateParty, questionId, old_name, o
             }
         ).then((response) => {
             toast.success("Вопрос обновлен!");
-            console.log(response)
         }).catch(err => {
             console.log(err);
             toast.error("Что-то не так.");
