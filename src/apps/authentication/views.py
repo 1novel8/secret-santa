@@ -42,12 +42,13 @@ class UserViewSet(SerializeByActionMixin,
     http_method_names = ['get', 'patch', 'post', 'delete']
 
     def perform_create(self, **kwargs):
-        if 'token' in self.request.query_params:
+        print(kwargs)
+        if 'token' in kwargs:
             kwargs['is_verified'] = True
-            kwargs['email'] = decode_token(self.request.query_params.get('token'))
+            kwargs['email'] = decode_token(kwargs.pop('token'))
         else:
             kwargs['is_verified'] = False
-        return self.service.create(**kwargs, password=self.request.data['password'])
+        return self.service.create(**kwargs)
 
     def perform_update(self, **kwargs):
         return self.service.update(user=self.request.user, **kwargs)

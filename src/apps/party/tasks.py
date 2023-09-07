@@ -13,14 +13,11 @@ from apps.party.models import Party, DrawResult
 def invite_user_by_email(email, party_id, party_name):
     subject = f'Hi! You was invited to Secret Santa Party named "{party_name}"!'
 
-    register_url = f'http://localhost:8000/api/users/?token={generate_token(email)} '
-    join_url = f'http://localhost:8000/api/parties/{party_id}/join/'
+    register_url = f'http://localhost:3000/?token={generate_token(email)}'
 
     message = f'If you have no account yet' \
               f'register here: ' \
               f'{register_url}' \
-              f'To join go here: ' \
-              f'{join_url}'
 
     from_email = 'secret_santa@gmail.com'
     to_email = [email]

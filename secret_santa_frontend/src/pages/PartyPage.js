@@ -83,9 +83,6 @@ function PartyPage({isLoggedIn, setIsLoggedIn}){
                 <Modal active={inviteModalActive} setActive={setInviteModelActive}>
                     <InviteForm setActiveModal={setInviteModelActive} updateParty={fetchParty} partyId={partyId}/>
                 </Modal>
-                {/*<Modal active={inviteModalActive} setActive={setInviteModelActive}>*/}
-                {/*    <JoinForm setActiveModal={setInviteModelActive} updateParty={fetchParty} partyId={partyId}/>*/}
-                {/*</Modal>*/}
             </div>
         )}
     return (<Navigate to="/"/>)

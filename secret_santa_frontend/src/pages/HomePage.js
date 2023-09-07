@@ -1,18 +1,31 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Modal from "../components/Modal";
 import LoginForm from "../components/LoginForm";
 import RegisterForm from "../components/RegisterForm";
 import "../css/general.css"
 import "../css/homepage.css"
+import {Navigate, useSearchParams} from "react-router-dom";
+import PartyPage from "./PartyPage";
 
 function HomePage({isLoggedIn, setIsLoggedIn}){
-    const [authModalActive, setAuthModalActive] = useState(false)
-    const [registerForm, setRegisterForm] = useState(false)
-    const onCreatePartyClick = () =>{
-        if(isLoggedIn === false){
-            setAuthModalActive(true)
+    const [authModalActive, setAuthModalActive] = useState(false);
+    const [registerForm, setRegisterForm] = useState(false);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const token = searchParams.get('token')
+    const onCreatePartyClick = (event) =>{
+        event.preventDefault();
+        if(isLoggedIn === false) {
+            setAuthModalActive(true);
+        } else {
+            return <Navigate to="party"/>;
         }
     }
+    useEffect(() => {
+        if (token !== null) {
+            setRegisterForm(true);
+            setAuthModalActive(true);
+        }
+    },[]);
     return(
         <div >
             <main>
@@ -23,7 +36,7 @@ function HomePage({isLoggedIn, setIsLoggedIn}){
             <Modal active={authModalActive} setActive={setAuthModalActive}>
                 {registerForm ?
                     <div>
-                        <RegisterForm setRegisterForm={setRegisterForm}></RegisterForm>
+                        <RegisterForm token={token} setRegisterForm={setRegisterForm}></RegisterForm>
                         <button onClick={() =>{setRegisterForm(false)}}>
                             У меня уже есть аккунт</button>
                     </div>
