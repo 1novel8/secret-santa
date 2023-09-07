@@ -15,9 +15,6 @@ import ProfilePage from "./pages/ProfilePage";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(storage.getToken() !== null);
-    // const tokenVerify = () => {
-    //     axiosInstance.post()
-    // }
       return (
           <div>
             <Routes>

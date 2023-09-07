@@ -8,3 +8,5 @@ export const QUESTION_URL = "questions/"
 export const USER_URL = "users/"
 
 export const PRESENT_URL = "presents/"
+
+export const BASE_URL = 'http://127.0.0.1:8000/'

@@ -74,4 +74,4 @@ function Party({setParty, setQuestionModalActive, updateParty, updatePartyList, 
     )
 }
 
-export default Party
+export default Party;

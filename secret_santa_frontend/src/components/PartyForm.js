@@ -96,4 +96,4 @@ function PartyForm({updatePartyList, setActiveModal}) {
     )
 }
 
-export default PartyForm
+export default PartyForm;
