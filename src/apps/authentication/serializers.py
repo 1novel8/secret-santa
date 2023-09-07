@@ -38,10 +38,12 @@ class CreateUserSerializer(serializers.ModelSerializer):
         write_only=True
     )
     email = serializers.CharField(max_length=200, required=False)
+    token = serializers.CharField(max_length=255, required=False)
 
     class Meta(BaseUserSerializer.Meta):
         fields = list(BaseUserSerializer.Meta.fields)
         fields.append('password')
+        fields.append('token')
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)

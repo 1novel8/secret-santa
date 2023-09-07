@@ -63,7 +63,8 @@ function Party({setParty, setQuestionModalActive, updateParty, updatePartyList, 
                 </div>
                 {party.questions ?
                     <div>
-                        <button className="oval-button" onClick={() =>{setQuestionModalActive(true)}}>Добавить вопрос</button>
+                        {party.is_owner &&
+                        <button className="oval-button" onClick={() =>{setQuestionModalActive(true)}}>Добавить вопрос</button>}
                         <QuestionList updateParty={updateParty} isOwner={party.is_owner} questions={party.questions}/>
                     </div>
                     :

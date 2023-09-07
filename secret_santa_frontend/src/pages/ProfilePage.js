@@ -19,7 +19,6 @@ function ProfilePage({isLoggedIn, setIsLoggedIn}){
         axiosInstance.get(USER_URL + 'me/')
             .then(response => {
                 setUser(response.data);
-                console.log(user)
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -29,7 +28,6 @@ function ProfilePage({isLoggedIn, setIsLoggedIn}){
         axiosInstance.get(PRESENT_URL + 'me/')
             .then(response => {
                 setPresentList(response.data);
-                console.log(user)
             })
             .catch(error => {
                 console.error('Error fetching data:', error);

@@ -25,9 +25,9 @@ function PartyItem({item}) {
 
 function PartyList({updatePartyList, partyList, setPartyId}) {
     const [joinModalActive, setJoinModelActive] = useState(false)
-    const [joinPartyId, setJoinPartyId] = useState(null)
-    const join = (id) =>{
-        axiosInstance.post(PARTY_URL + id + '/join/')
+    const [joinParty, setJoinParty] = useState(null)
+    const join = () =>{
+        axiosInstance.post(PARTY_URL + joinParty.id + '/join/')
             .then(response => {
                 toast.success('Вы присоединились')
                 updatePartyList();
@@ -47,7 +47,7 @@ function PartyList({updatePartyList, partyList, setPartyId}) {
                              if(item.is_confirmed === true){
                                  setPartyId(item.id)
                              }else{
-                                 setJoinPartyId(item.id);
+                                 setJoinParty(item);
                                  setJoinModelActive(true);
                              }}}>
                         <PartyItem item={item}/>
@@ -55,10 +55,16 @@ function PartyList({updatePartyList, partyList, setPartyId}) {
                 ))}
             </div>
             <Modal active={joinModalActive} setActive={setJoinModelActive}>
-                <button className="oval-button" onClick={() =>{
-                    join(joinPartyId)
-                    setJoinModelActive(false);
-                }}>Присоединиться</button>
+                { joinParty &&
+                <div>
+                    <h1>Тебя пригласили в группу: {joinParty.name}</h1>
+                    <h3>Описание: {joinParty.description}</h3>
+                    <button className="oval-button" onClick={() =>{
+                        join()
+                        setJoinModelActive(false);
+                    }}>Присоединиться</button>
+                </div>
+                }
             </Modal>
         </div>
     )

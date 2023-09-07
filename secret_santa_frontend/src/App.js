@@ -15,6 +15,7 @@ import ProfilePage from "./pages/ProfilePage";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(storage.getToken() !== null);
+
       return (
           <div>
             <Routes>
