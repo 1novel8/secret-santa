@@ -71,4 +71,4 @@ function RegisterForm({setRegisterForm}) {
     )
 }
 
-export default RegisterForm
+export default RegisterForm;

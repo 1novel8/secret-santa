@@ -37,6 +37,8 @@ class BasePartySerializer(serializers.ModelSerializer):
 class ListPartySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     image = serializers.ImageField(required=False)
+    is_confirmed = serializers.BooleanField()
+
     class Meta:
         model = Party
         fields = [
@@ -45,6 +47,7 @@ class ListPartySerializer(serializers.ModelSerializer):
             'description',
             'image',
             'image',
+            'is_confirmed',
         ]
 
 

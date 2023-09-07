@@ -61,4 +61,4 @@ function QuestionForm({updateParty, setActiveModal, partyId}) {
     )
 }
 
-export default QuestionForm
+export default QuestionForm;

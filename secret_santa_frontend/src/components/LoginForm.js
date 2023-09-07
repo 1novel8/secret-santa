@@ -63,4 +63,4 @@ function LoginForm({setAuthModalActive, setIsLoggedIn}) {
     )
 }
 
-export default LoginForm
+export default LoginForm;

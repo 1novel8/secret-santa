@@ -1,5 +1,6 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import status, permissions
+from rest_framework.decorators import action
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 
@@ -26,6 +27,7 @@ class UserViewSet(SerializeByActionMixin,
         'create': CreateUserSerializer,
         'partial_update': UpdateUserSerializer,
         'destroy': RetrieveUserSerializer,
+        'me': RetrieveUserSerializer,
     }
     permissions_by_action = {
         'retrieve': [permissions.IsAuthenticated],
@@ -59,4 +61,9 @@ class UserViewSet(SerializeByActionMixin,
         obj = self.service.get_by_id(**kwargs)
         serializer = self.get_serializer(instance=obj)
 
+        return Response(serializer.data)
+
+    @action(methods=["GET"], detail=False, url_path='me')
+    def me(self, request, *args, **kwargs):
+        serializer = self.get_serializer(instance=self.request.user)
         return Response(serializer.data)
