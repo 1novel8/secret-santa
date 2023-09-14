@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from rest_framework import mixins
+from rest_framework import mixins, status
 
 from apps.present.models import Present
 from apps.present.serializers import BasePresentSerializer
@@ -21,6 +21,15 @@ class PresentViewSet(mixins.ListModelMixin,
     service = PresentService()
 
     http_method_names = ['get', 'patch', 'put', 'post', 'delete']
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        obj = self.perform_create(**kwargs, **serializer.validated_data)
+
+        headers = self.get_success_headers(serializer.data)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, **kwargs):
         return self.service.create(user=self.request.user, **kwargs)

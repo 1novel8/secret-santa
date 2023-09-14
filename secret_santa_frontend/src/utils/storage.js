@@ -25,6 +25,20 @@ const storage = {
         window.localStorage.setItem(`refresh`, JSON.stringify(token));
     },
 
+    getUserId: () =>{
+        try {
+            return JSON.parse(
+                window.localStorage.getItem(`id`)
+            )
+        } catch {
+            return null;
+        }
+    },
+
+    setUserId: (id) => {
+        window.localStorage.setItem(`id`, JSON.stringify(id));
+    },
+
     clearToken: () => {
         window.localStorage.removeItem(`token`);
         window.localStorage.removeItem('refresh');

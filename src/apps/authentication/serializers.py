@@ -1,6 +1,7 @@
 from django.core.validators import validate_email
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from apps.authentication.models import User
 
@@ -57,3 +58,10 @@ class CreateUserSerializer(serializers.ModelSerializer):
             return value
         except ValidationError:
             raise serializers.ValidationError("Invalid email address")
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['id'] = self.user.id
+        return data
