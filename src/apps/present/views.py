@@ -27,9 +27,7 @@ class PresentViewSet(mixins.ListModelMixin,
         serializer.is_valid(raise_exception=True)
         obj = self.perform_create(**kwargs, **serializer.validated_data)
 
-        headers = self.get_success_headers(serializer.data)
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def perform_create(self, **kwargs):
         return self.service.create(user=self.request.user, **kwargs)

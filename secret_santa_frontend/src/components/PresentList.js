@@ -18,14 +18,13 @@ function PresentItem({item}) {
     );
 }
 
-function PresentList({partyList, setPartyId}) {
+function PresentList({presentList, setPresentId}) {
 
     return(
         <div>
-            <h1>Твои группы</h1>
             <div className="party-list">
-                {partyList.map(item => (
-                    <div className="link-no-style" key={item.id} onClick={() => {setPartyId(item.id)}}>
+                {presentList.map(item => (
+                    <div className="link-no-style" key={item.id} onClick={() => {setPresentId(item.id)}}>
                         <PresentItem item={item}/>
                     </div>
                 ))}

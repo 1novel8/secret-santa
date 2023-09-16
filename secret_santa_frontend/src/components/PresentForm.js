@@ -4,7 +4,7 @@ import {axiosInstance} from "../utils/axios";
 import toast from "react-hot-toast";
 import {PRESENT_URL} from "../utils/urls"
 
-function PresentForm({setActiveModal, isPreferred, setIsPreferred}) {
+function PresentForm({updatePresentList, setActiveModal, isPreferred, setIsPreferred}) {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
@@ -35,6 +35,7 @@ function PresentForm({setActiveModal, isPreferred, setIsPreferred}) {
             formData.append('image', image);
             formData.append('is_preferred', isPreferred)
             await CreatePresent(formData);
+            updatePresentList();
             setActiveModal(false);
         } catch (error) {
             console.error("Error creating present:", error);
