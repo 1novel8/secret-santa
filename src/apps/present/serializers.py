@@ -20,8 +20,3 @@ class BasePresentSerializer(serializers.ModelSerializer):
             'is_preferred',
         ]
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        # is_preferred = self.context.get('is_preferred')
-        # representation['is_preferred'] = is_preferred
-        return representation
