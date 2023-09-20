@@ -20,4 +20,4 @@ class PresentService(BaseService):
         return present
 
     def list(self, **kwargs) -> list:
-        return self.repository.model.objects.filter(userpresent__user_id=kwargs.get('user').id)
+        return self.repository.list(user=kwargs.get('user').id)

@@ -30,6 +30,7 @@ function LoginForm({setAuthModalActive, setIsLoggedIn}) {
         ).then((response) => {
             storage.setToken(response.data['access']);
             storage.setRefreshToken(response.data['refresh']);
+            storage.setUserId(response.data['id']);
             setIsLoggedIn(true);
             setAuthModalActive(false);
             toast.success("Добро пожаловать!");

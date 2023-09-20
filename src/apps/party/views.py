@@ -80,7 +80,6 @@ class PartyViewSet(custom_mixins.SerializeByActionMixin,
             party=self.service.get_by_id(user=self.request.user, **kwargs),
         )
         invite_user_by_email.delay(
-            party_id=party.id,
             party_name=party.name,
             **request.data
         )
