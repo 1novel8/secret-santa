@@ -42,6 +42,7 @@ function PartyList({updatePartyList, partyList, setPartyId}) {
             <h1>Твои группы</h1>
             <div className="party-list">
                 {partyList.map(item => (
+
                     <div className="link-no-style" key={item.id}
                          onClick={() => {
                              if(item.is_confirmed === true){

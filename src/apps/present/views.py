@@ -33,7 +33,8 @@ class PresentViewSet(mixins.ListModelMixin,
         return self.service.create(user=self.request.user, **kwargs)
 
     def list(self, request, *args, **kwargs):
-        queryset = self.service.list(user=self.request.user, **kwargs)
+        user_id = request.query_params.get('user_id')
+        queryset = self.service.list(user_id=user_id)
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
