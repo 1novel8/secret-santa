@@ -20,4 +20,8 @@ class PresentService(BaseService):
         return present
 
     def list(self, **kwargs) -> list:
-        return self.repository.list(user=kwargs.get('user').id)
+        user_id = kwargs.get('user_id')
+        if not user_id:
+            return self.repository.user_list(user_id=user_id)
+        else:
+            return self.repository.list()

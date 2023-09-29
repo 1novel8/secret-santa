@@ -17,7 +17,11 @@ class PresentRepository(BaseRepository):
         return present
 
     def list(self, **kwargs):
-        present_list = (self.model.objects.filter(userpresent__user=kwargs.get('user'))
+        present_list = self.model.objects.all()
+        return present_list
+
+    def user_list(self, **kwargs):
+        present_list = (self.model.objects.filter(userpresent__user_id=kwargs.get('user_id'))
                         .prefetch_related('userpresent').values('id',
                                                                 'name',
                                                                 'description',

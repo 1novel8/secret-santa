@@ -1,4 +1,6 @@
 import "../css/homepage.css"
+import {Navigate, NavLink} from "react-router-dom";
+import {FaUserNinja} from "react-icons/fa";
 
 
 function Image({ imageUrl }) {
@@ -27,9 +29,9 @@ function UserList({userList}) {
             <h1>Участники</h1>
             <div className="user-list">
                 {userList.map(item => (
-                    <div className="link-no-style" key={item.id}>
-                        <UserItem item={item}/>
-                    </div>
+                    <NavLink className="link-no-style" to={{pathname: "/profile"}} state={{userId: item.id}} key={item.id}>
+                            <UserItem item={item}/>
+                    </NavLink>
                 ))}
             </div>
         </div>
