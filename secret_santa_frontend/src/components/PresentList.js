@@ -1,8 +1,10 @@
+import {BASE_URL} from "../utils/urls";
 
 function Image({ imageUrl }) {
+    console.log(imageUrl)
     return (
         <div className="image-container">
-            <img src={imageUrl} alt=":)" className="rounded-image"/>
+            <img src={BASE_URL+'media/' + imageUrl} alt=":)" className="rounded-image"/>
         </div>
     );
 }

@@ -1,12 +1,13 @@
 import "../css/homepage.css"
 import {Navigate, NavLink} from "react-router-dom";
 import {FaUserNinja} from "react-icons/fa";
+import {BASE_URL} from "../utils/urls";
 
 
 function Image({ imageUrl }) {
     return (
         <div className="image-container">
-            <img src={imageUrl} alt=":)" className="rounded-image"/>
+            <img src={BASE_URL + 'media/' + imageUrl} alt=":)" className="rounded-image"/>
         </div>
     );
 }
