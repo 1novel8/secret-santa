@@ -1,13 +1,13 @@
 import Modal from "./Modal";
 import {useState} from "react";
 import {axiosInstance} from "../utils/axios";
-import {PARTY_URL} from "../utils/urls";
+import {BASE_URL, PARTY_URL} from "../utils/urls";
 import toast from "react-hot-toast";
 
 function Image({ imageUrl }) {
     return (
         <div className="image-container">
-            <img src={imageUrl} alt=":)" className="rounded-image"/>
+            <img src={BASE_URL + 'media/' + imageUrl} alt=":)" className="rounded-image"/>
         </div>
     );
 }

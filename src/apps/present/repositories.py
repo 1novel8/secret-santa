@@ -22,10 +22,10 @@ class PresentRepository(BaseRepository):
 
     def user_list(self, **kwargs):
         present_list = (self.model.objects.filter(userpresent__user_id=kwargs.get('user_id'))
-                        .prefetch_related('userpresent').values('id',
-                                                                'name',
-                                                                'description',
-                                                                'image',
-                                                                'url',
-                                                                is_preferred=F('userpresent__is_preferred')))
+                        .prefetch_related('userpresent_set').values('id',
+                                                                    'name',
+                                                                    'description',
+                                                                    'image',
+                                                                    'url',
+                                                                    is_preferred=F('userpresent__is_preferred')))
         return present_list

@@ -22,6 +22,6 @@ class PresentService(BaseService):
     def list(self, **kwargs) -> list:
         user_id = kwargs.get('user_id')
         if not user_id:
-            return self.repository.user_list(user_id=user_id)
-        else:
             return self.repository.list()
+        else:
+            return self.repository.user_list(user_id=user_id)

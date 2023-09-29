@@ -69,7 +69,7 @@ function ProfilePage({isLoggedIn, setIsLoggedIn}){
                     }
                 </aside>
                 <main className="content">
-                    <h1>Мой профиль</h1>
+                    <h1>Профиль</h1>
                     {user &&
                         <User user={user}/>
                     }

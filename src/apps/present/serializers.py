@@ -5,7 +5,7 @@ from apps.present.models import Present
 
 class BasePresentSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    image = serializers.ImageField(required=False)
+    image = serializers.URLField(required=False)
     url = serializers.URLField(required=False)
     is_preferred = serializers.BooleanField(required=True)
 

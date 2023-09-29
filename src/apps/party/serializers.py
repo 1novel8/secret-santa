@@ -36,7 +36,7 @@ class BasePartySerializer(serializers.ModelSerializer):
 
 class ListPartySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    image = serializers.ImageField(required=False)
+    image = serializers.URLField(required=False)
     is_confirmed = serializers.BooleanField()
 
     class Meta:
