@@ -1,3 +1,5 @@
+import logging
+
 from drf_spectacular.utils import extend_schema
 from rest_framework import status, permissions
 from rest_framework.decorators import action
@@ -11,6 +13,8 @@ from apps.authentication.services import UserService
 from apps.core.mixins import SerializeByActionMixin, PermissionsByAction
 from apps.core import mixins as custom_mixins
 from apps.core.utils import decode_token
+
+logger = logging.getLogger(__name__)
 
 
 @extend_schema(tags=['user'])
@@ -42,7 +46,6 @@ class UserViewSet(SerializeByActionMixin,
     http_method_names = ['get', 'patch', 'post', 'delete']
 
     def perform_create(self, **kwargs):
-        print(kwargs)
         if 'token' in kwargs:
             kwargs['is_verified'] = True
             kwargs['email'] = decode_token(kwargs.pop('token'))
