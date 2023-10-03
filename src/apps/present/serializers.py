@@ -19,4 +19,3 @@ class BasePresentSerializer(serializers.ModelSerializer):
             'url',
             'is_preferred',
         ]
-

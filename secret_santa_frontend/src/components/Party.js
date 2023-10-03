@@ -6,15 +6,16 @@ import {useState} from "react";
 import EditPartyForm from "./EditPartyForm";
 import {AiFillDelete} from "react-icons/ai";
 import {axiosInstance} from "../utils/axios";
-import {PARTY_URL} from "../utils/urls";
+import {BASE_URL, PARTY_URL} from "../utils/urls";
 import toast from "react-hot-toast";
+import Results from "./Results";
 
 
 const timeZone = 'Europe/Minsk';
 
 function Party({setParty, setQuestionModalActive, updateParty, updatePartyList, party}){
     const [editParty, setEditParty] = useState(false)
-
+    const currentDateTime = new Date();
     const onDeleteParty = (event) =>{
         event.preventDefault();
         axiosInstance.delete(
@@ -34,7 +35,7 @@ function Party({setParty, setQuestionModalActive, updateParty, updatePartyList, 
         <div className="party-container">
             <div>
                 <div className="big-image-container">
-                    <img src={'http://127.0.0.1:8000'+party.image} alt=":)" className="big-rounded-image"/>
+                    <img src={BASE_URL+party.image} alt=":)" className="big-rounded-image"/>
                 </div>
                 <div className="party-block">
                     {party.is_owner &&
@@ -61,14 +62,19 @@ function Party({setParty, setQuestionModalActive, updateParty, updatePartyList, 
                         </div>
                     }
                 </div>
-                {party.questions ?
+                {(party.finish_time && new Date(party.finish_time) < currentDateTime) ?
+                    <Results partyId={party.id}/> :
                     <div>
-                        {party.is_owner &&
-                        <button className="oval-button" onClick={() =>{setQuestionModalActive(true)}}>Добавить вопрос</button>}
-                        <QuestionList updateParty={updateParty} isOwner={party.is_owner} questions={party.questions}/>
+                        {party.questions ?
+                            <div>
+                                {party.is_owner &&
+                                <button className="oval-button" onClick={() =>{setQuestionModalActive(true)}}>Добавить вопрос</button>}
+                                <QuestionList updateParty={updateParty} isOwner={party.is_owner} questions={party.questions}/>
+                            </div>
+                            :
+                            <h2>У вас пока нет вопросов</h2>
+                        }
                     </div>
-                    :
-                    <h2>У вас пока нет вопросов</h2>
                 }
             </div>
         </div>
