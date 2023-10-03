@@ -46,6 +46,7 @@ class UserViewSet(SerializeByActionMixin,
     http_method_names = ['get', 'patch', 'post', 'delete']
 
     def perform_create(self, **kwargs):
+        logger.warning('12saxec')
         if 'token' in kwargs:
             kwargs['is_verified'] = True
             kwargs['email'] = decode_token(kwargs.pop('token'))

@@ -10,26 +10,32 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 LOGGING_LEVEL = os.getenv('LOGGING_LEVEL')
 LOGGING_HANDLER = os.getenv('LOGGING_HANDLER')
+LOGGING_FORMAT = os.getenv('LOGGING_FORMAT')
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'base_formatter': {
+        'string': {
             'format': '{levelname} {asctime} {name} {process:d} {thread:d} {message}',
             'style': '{',
-        }
+        },
+        'json': {
+            '()': 'pythonjsonlogger.jsonlogger.JsonFormatter',
+            'format': '{levelname} {asctime} {name} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
     },
     'handlers': {
         'file': {
             'level': LOGGING_LEVEL,
             'class': 'logging.FileHandler',
             'filename': 'log.log',
-            'formatter': 'base_formatter'
+            'formatter': LOGGING_FORMAT,
         },
         'console': {
             'level': LOGGING_LEVEL,
             'class': 'logging.StreamHandler',
-            'formatter': 'base_formatter'
+            'formatter': LOGGING_FORMAT,
         }
     },
     'loggers': {
