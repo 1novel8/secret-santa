@@ -5,7 +5,62 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+LOGGING_LEVEL = os.getenv('LOGGING_LEVEL')
+LOGGING_HANDLER = os.getenv('LOGGING_HANDLER')
+LOGGING_FORMAT = os.getenv('LOGGING_FORMAT')
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'string': {
+            'format': '{levelname} {asctime} {name} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'json': {
+            '()': 'pythonjsonlogger.jsonlogger.JsonFormatter',
+            'format': '{levelname} {asctime} {name} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': LOGGING_LEVEL,
+            'class': 'logging.FileHandler',
+            'filename': 'log.log',
+            'formatter': LOGGING_FORMAT,
+        },
+        'console': {
+            'level': LOGGING_LEVEL,
+            'class': 'logging.StreamHandler',
+            'formatter': LOGGING_FORMAT,
+        }
+    },
+    'loggers': {
+        'apps.authentication.views': {
+            'handlers': [LOGGING_HANDLER],
+            'level': LOGGING_LEVEL,
+            'propagate': True,
+        },
+        'apps.party.views': {
+            'handlers': [LOGGING_HANDLER],
+            'level': LOGGING_LEVEL,
+            'propagate': True,
+        },
+        'apps.present.views': {
+            'handlers': [LOGGING_HANDLER],
+            'level': LOGGING_LEVEL,
+            'propagate': True,
+        },
+        'apps.question.views': {
+            'handlers': [LOGGING_HANDLER],
+            'level': LOGGING_LEVEL,
+            'propagate': True,
+        }
+    }
+}
 
 FRONT_URL = 'http://localhost:3000/'
 
